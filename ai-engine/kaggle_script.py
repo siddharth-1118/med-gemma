@@ -15,29 +15,51 @@ try:
     from transformers import AutoProcessor, PaliGemmaForConditionalGeneration, BitsAndBytesConfig
     from huggingface_hub import login
     import bitsandbytes as bnb
+    from dotenv import load_dotenv
+    load_dotenv()
     from kaggle_secrets import UserSecretsClient
+    from pyngrok import ngrok, conf
 except ImportError:
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "torch", "transformers", "gradio", "pillow", "accelerate", "huggingface_hub", "kaggle-secrets", "bitsandbytes"])
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "torch", "transformers", "gradio", "pillow", "accelerate", "huggingface_hub", "bitsandbytes", "-U", "python-dotenv", "pyngrok"])
     import torch
     import gradio as gr
     from transformers import AutoProcessor, PaliGemmaForConditionalGeneration, BitsAndBytesConfig
     from huggingface_hub import login
     import bitsandbytes as bnb
+    from dotenv import load_dotenv
+    load_dotenv()
     from kaggle_secrets import UserSecretsClient
+    from pyngrok import ngrok, conf
 
 
 # --- AUTHENTICATION ---
-try:
-    user_secrets = UserSecretsClient()
-    HF_TOKEN = user_secrets.get_secret("HF_TOKEN")
-    if HF_TOKEN:
-        print("Logging in to Hugging Face with Secret Token...")
+# --- AUTHENTICATION ---
+HF_TOKEN = os.getenv("HF_TOKEN")
+
+if not HF_TOKEN:
+    try:
+        from kaggle_secrets import UserSecretsClient
+        user_secrets = UserSecretsClient()
+        HF_TOKEN = user_secrets.get_secret("HF_TOKEN")
+        print("✅ Found HF_TOKEN in Kaggle Secrets.")
+    except Exception:
+        print("⚠️ Kaggle Secret not found / Not running on Kaggle.")
+
+# Fallback (Optional - ideally use .env)
+if not HF_TOKEN:
+    # Manual fallback if needed, otherwise leave None
+    # HF_TOKEN = "hf_..." 
+    pass
+    
+if HF_TOKEN:
+    try:
         login(token=HF_TOKEN)
-    else:
-        print("⚠️ Secret 'HF_TOKEN' not found. Using Mock mode.")
-except Exception as e:
-    print(f"Authentication Message: {e}")
-    HF_TOKEN = None
+        print("Logged in to Hugging Face successfully.")
+    except Exception as e:
+        print(f"Login failed: {e}")
+        HF_TOKEN = None
+else:
+    print("⚠️ No HF_TOKEN found. Using Mock mode.")
 
 
 # --- MODEL CONFIGURATION (With 8-bit Loading for Memory Savings) ---
@@ -126,4 +148,31 @@ demo = gr.Interface(
 
 if __name__ == "__main__":
     print("Starting Gradio Server...")
-    demo.launch(share=True, debug=True)
+    
+    # --- NGROK SETUP (Optional) ---
+    # Attempt to get Ngrok token from Env or Kaggle Secrets
+    NGROK_TOKEN = os.getenv("NGROK_AUTH_TOKEN")
+    if not NGROK_TOKEN:
+        try:
+            NGROK_TOKEN = user_secrets.get_secret("NGROK_AUTH_TOKEN")
+        except:
+            pass
+            
+    # Fallback if not found
+    if not NGROK_TOKEN:
+        NGROK_TOKEN = "39OE32a2Rac9K1ehHHFFkRjtbLy_xBzApVQzTBhpJQUYyfmk"
+
+    if NGROK_TOKEN:
+        print("🔗 Ngrok key found. Setting up ngrok tunnel...")
+        conf.get_default().auth_token = NGROK_TOKEN
+        # Open a tunnel to the default Gradio port
+        public_url = ngrok.connect(7860).public_url
+        print(f"✅ Ngrok Tunnel Active: {public_url}")
+        print(f"👉 COPY THIS URL to your .env file as AI_SERVICE_URL")
+        
+        # Launch without sharing, since ngrok handles it
+        demo.launch(share=False, debug=True, server_port=7860)
+    else:
+        print("⚠️ No NGROK_AUTH_TOKEN found. Falling back to default Gradio Share.")
+        print("Note: Gradio Share links expire in 72 hours.")
+        demo.launch(share=True, debug=True)

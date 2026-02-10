@@ -17,49 +17,93 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 // Mock Analysis Logic
+const MEDICAL_SYSTEM_PROMPT = `
+You are a medical multimodal analysis assistant.
+CRITICAL SAFETY RULE: You MUST NOT analyze non-medical images.
+
+STEP 1: IMAGE TYPE VERIFICATION
+- Is it a valid medical image (X-ray, CT, MRI)?
+- If NO (selfie, object, etc.): STOP. Output: "The uploaded image does not appear to be a medical radiology image."
+
+STEP 2: MEDICAL ANALYSIS (Only if Valid)
+- Specific visual observations.
+- Grounded in image features.
+
+Output structure (JSON):
+{
+  "imageFindings": "Visual observations OR Rejection Message",
+  "abnormalityLocation": "Location/Extent/Confidence",
+  "correlation": "Correlation with text",
+  "negativeFindings": "Absent findings",
+  "uncertainty": "Confidence level",
+  "suggestions": "Next steps"
+}
+`;
+
+// Mock Analysis Logic - Updated to 7-Step Strict Protocol
 const DEMO_RESPONSES = {
     'case1': {
-        jointInterpretation: [
-            "Radiographic opacity observed in the right lower lobe consistent with consolidation",
-            "Clinical history of fever and productive cough correlates with imaging findings",
-            "Pattern is highly suggestive of bacterial pneumonia given the patient profile"
+        imageFindings: [
+            "Focal opacity observed in the right lower lung zone.",
+            "Opacification is patchy and ill-defined.",
+            "Air bronchograms are visible within the opacity.",
+            "Left lung field is clear.",
+            "No pleural effusion or pneumothorax visible."
         ],
-        clinicalContext: 'High-risk patient (Age 65+, smoker). Findings warrant immediate intervention.',
-        uncertainties: 'Cardiac silhouette slightly obscured; cannot rule out minor effusion.',
-        followUps: [
-            'Initiate empiric antibiotic therapy',
-            'Sputum culture and sensitivity',
-            'Follow-up Chest X-ray in 14 days'
+        abnormalityLocation: "Right Lower Lobe (Posterior basal segment). Moderate extent. High visual confidence.",
+        correlation: "Option A: Image supports the clinical presentation. The focal RLL consolidation matches the history of fever and cough.",
+        negativeFindings: [
+            "No large pleural effusion.",
+            "No pneumothorax.",
+            "No hilar adenopathy."
+        ],
+        uncertainty: "Moderate Confidence. Retrocardiac area is partially obscured.",
+        suggestions: [
+            "Correlate with inflammatory markers (CRP/WBC).",
+            "Follow-up Chest X-ray in 2-4 weeks to confirm resolution."
         ],
         isInconsistent: false
     },
     'case2': {
-        jointInterpretation: [
-            "CRITICAL ALERT: Imaging reveals a complete transverse fracture of the radius/ulna",
-            "Patient chief complaint is 'Abdominal Pain' with 'No trauma history'",
-            "This represents a zero-correlation event between orthogonal data modalities",
-            "High probability of file mismatch or wrong image upload"
+        imageFindings: [
+            "Clear lung fields bilaterally.",
+            "No focal consolidation or acute opacity.",
+            "Frank transverse fracture of the distal radius/ulna (forearm) clearly visible.",
+            "Soft tissue swelling around the fracture site."
         ],
-        clinicalContext: 'POTENTIAL PATIENT SAFETY EVENT. Mismatched records can lead to erroneous treatment.',
-        uncertainties: 'Cannot reconcile limb fracture with abdominal symptoms.',
-        followUps: [
-            'HALT clinical decision making',
-            'Verify Patient Name and DOB on image metadata',
-            'Manually re-order imaging study'
+        abnormalityLocation: "Distal Radius/Ulna (Forearm). High visual confidence.",
+        correlation: "Option C: Image does NOT support the clinical presentation. Patient complains of 'Abdominal Pain', but image shows a forearm fracture.",
+        negativeFindings: [
+            "No abdominal pathology visible (wrong body part).",
+            "No chest pathology."
+        ],
+        uncertainty: "High Confidence in mismatch.",
+        suggestions: [
+            "CRITICAL: Verify patient identity and uploaded file.",
+            "Reject image: Wrong modality/body part."
         ],
         isInconsistent: true
     }
 };
 
 const GENERIC_RESPONSE = {
-    jointInterpretation: [
-        "Image quality sufficient for automated multimodal screening",
-        "No critical inconsistencies detected with submitted patient metadata",
-        "Findings require radiologist correlation for final clinical sign-off"
+    imageFindings: [
+        "Lung fields are clear bilaterally.",
+        "No focal consolidation, effusion, or pneumothorax.",
+        "Cardiomediastinal silhouette is within normal limits.",
+        "Pulmonary vasculature is normal."
     ],
-    clinicalContext: 'External image import. Verification required.',
-    uncertainties: 'Patient positioning varies from baseline protocol.',
-    followUps: ['Confirm patient ID matches image metadata', 'Standard diagnostic review'],
+    abnormalityLocation: "No clearly localizable abnormal region is identified.",
+    correlation: "Option B: Image partially supports the clinical presentation. Normal CXR does not rule out viral bronchitis or early infection.",
+    negativeFindings: [
+        "No acute fracture.",
+        "No pulmonary edema."
+    ],
+    uncertainty: "Low Confidence. limited by single AP view.",
+    suggestions: [
+        "Clinical correlation required.",
+        "Consider CT if suspicion for PE or occult disease is high."
+    ],
     isInconsistent: false
 };
 
@@ -75,33 +119,35 @@ app.post('/api/analyze', upload.single('image'), async (req, res) => {
 
     const caseId = req.body.caseId;
 
-    // 1. Try Real AI (if configured)
+    // 1. Try Real AI (FastAPI or Gradio)
     if (AI_SERVICE_URL) {
         console.log(`Forwarding to AI Service: ${AI_SERVICE_URL}`);
         try {
-            // Initialize Gradio Client
-            const client = await Client.connect(AI_SERVICE_URL);
-
-            // Convert buffer to Blob for Gradio (requires global Blob/File if Node 18+)
-            const blob = new Blob([req.file.buffer], { type: req.file.mimetype });
-
-            const result = await client.predict("/predict", {
-                image: blob,
-                prompt: "describe the medical condition in this x-ray",
-            });
-
-            if (result && result.data) {
-                // Gradio returns array of outputs. Our output is index 0 (JSON)
-                // Depending on Gradio version it might be result.data[0]
-                const jsonResponse = result.data[0];
-
-                // If it's a string, parse it. If object, use directly.
+            // Check if it's a Gradio URL (basic heuristic) or our FastAPI
+            if (AI_SERVICE_URL.includes("gradio")) {
+                const client = await Client.connect(AI_SERVICE_URL);
+                const blob = new Blob([req.file.buffer], { type: req.file.mimetype });
+                const userPrompt = req.body.prompt || "describe the medical condition in this x-ray";
+                const fullPrompt = `${MEDICAL_SYSTEM_PROMPT}\n\nUser Context: ${userPrompt}`;
+                const result = await client.predict("/predict", { image: blob, prompt: fullPrompt });
+                const jsonResponse = result.data ? result.data[0] : null;
                 const data = typeof jsonResponse === 'string' ? JSON.parse(jsonResponse) : jsonResponse;
-
-                console.log("AI Analysis Successful");
                 return res.json(data);
             } else {
-                throw new Error("Invalid response from Gradio");
+                // Assume Standard REST API (FastAPI)
+                const formData = new FormData();
+                const fileBlob = new Blob([req.file.buffer], { type: req.file.mimetype });
+                formData.append('image', fileBlob, req.file.originalname);
+                formData.append('prompt', req.body.prompt || "medical analysis");
+
+                const response = await fetch(`${AI_SERVICE_URL}/analyze`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+                const data = await response.json();
+                return res.json(data);
             }
 
         } catch (error) {
