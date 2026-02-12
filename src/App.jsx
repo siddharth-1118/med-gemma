@@ -63,47 +63,42 @@ function App() {
   };
 
   const runAnalysis = async () => {
+    if (!file) {
+      alert("Please upload an image first.");
+      return;
+    }
+
     setLoading(true);
-    // Simulate AI Thinking with variable delay
-    setTimeout(async () => {
-      const clinicalPrompt = `Patient: ${formData.age} ${formData.sex}. History: ${formData.history}. Complaint: ${formData.chiefComplaint}.`;
-      try {
-        const data = new FormData();
-        data.append('image', file);
-        data.append('prompt', clinicalPrompt);
-        data.append('caseId', 'custom');
-        // const response = await fetch(...); // Real backend call
-        // Mock data for visual demo consistency
-        const resData = {
-          imageFindings: [
-            "Right lower lobe heterogeneous opacity observing air bronchograms.",
-            "Left lung field clear; costophrenic angles sharp.",
-            "Cardiac silhouette within normal limits for age.",
-            "No pneumothorax or large effusion identified."
-          ],
-          abnormalityLocation: "Right Lung Base (Posterior). Moderate extent.",
-          correlation: "Option A: Image supports clinical symptoms. The RLL findings match the patient's fever and productive cough history.",
-          negativeFindings: [
-            "No discrete nodule.",
-            "No hilar lymphadenopathy.",
-            "No free air under diaphragm."
-          ],
-          uncertainty: "Moderate Confidence. Suboptimal inspiratory effort limits evaluation of minor atelectasis.",
-          suggestions: [
-            "Correlate with inflammatory markers (CRP/WBC).",
-            "Consider follow-up imaging in 6 weeks.",
-            "Monitor O2 saturation."
-          ]
-        };
-        setResult(resData);
-        setStep(3);
-      } catch (err) {
-        console.error(err);
-        alert("Analysis failed.");
-      } finally {
-        setLoading(false);
+    setStep(2); // Ensure we are on the animation/review step
+
+    try {
+      const clinicalPrompt = `Patient: ${formData.age} ${formData.sex}. History: ${formData.history}. Complaint: ${formData.chiefComplaint}. Symptoms: ${formData.symptoms}.`;
+
+      const data = new FormData();
+      data.append('image', file);
+      data.append('prompt', clinicalPrompt);
+      data.append('caseId', 'custom');
+
+      // Call the Node.js server (which proxies to the Python AI engine)
+      const response = await fetch('http://localhost:3000/api/analyze', {
+        method: 'POST',
+        body: data,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Server Error: ${response.statusText}`);
       }
-    }, 2800); // Slightly longer for "Thinking" VFX
+
+      const resData = await response.json();
+
+      setResult(resData);
+      setStep(3); // Move to results step
+    } catch (err) {
+      console.error("Analysis Error:", err);
+      alert(`Analysis failed: ${err.message}. Please ensure the backend server and AI engine are running.`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // --- CINEMATIC VFX DEFINITIONS ---

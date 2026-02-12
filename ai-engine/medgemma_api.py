@@ -17,12 +17,11 @@ import cv2
 from PIL import Image
 import io
 import pydicom
-from transformers import AutoProcessor, AutoModelForCausalLM, PaliGemmaForConditionalGeneration
+from transformers import AutoProcessor, PaliGemmaForConditionalGeneration, BitsAndBytesConfig
 
 # --- CONFIGURATION ---
-MODEL_ID = "google/paligemma-3b-ft-docvqa-448" # Placeholder: Replace with actual MedGemma or fine-tuned checkpoint
-# For real MedGemma/PaliGemma deployment on Kaggle/Colab, ensure you have access.
-# Fallback logic is implemented for environments without high-end GPUs.
+MODEL_ID = "google/medgemma-1.5-4b-it" 
+# This model requires significant VRAM. 4-bit quantization is enabled by default.
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 PORT = 8000
@@ -138,15 +137,27 @@ async def startup_event():
     global model, processor
     try:
         logger.info(f"Loading Model: {MODEL_ID} on {DEVICE}...")
-        # Note: Using AutoModelForCausalLM as a generic placeholder.
-        # For actual PaliGemma/MedGemma, use definitions from HuggingFace.
         
-        # Uncomment for real PaliGemma loading:
-        # model = PaliGemmaForConditionalGeneration.from_pretrained(MODEL_ID, torch_dtype=torch.float16).to(DEVICE)
-        # processor = AutoProcessor.from_pretrained(MODEL_ID)
+        # 4-bit Quantization Config for Memory Efficiency
+        quantization_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_compute_dtype=torch.float16,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_use_double_quant=True
+        )
         
-        # For demonstration purposes in this script constraint (simulating the structure):
-        logger.info("Model loaded successfully (Mock/Placeholder for now until weights available).")
+        processor = AutoProcessor.from_pretrained(MODEL_ID)
+        model = PaliGemmaForConditionalGeneration.from_pretrained(
+            MODEL_ID,
+            quantization_config=quantization_config,
+            device_map="auto"
+        )
+        
+        logger.info("✅ MedGemma 1.5 4B model loaded successfully with 4-bit quantization.")
+        
+    except Exception as e:
+        logger.error(f"Failed to load model: {e}")
+        logger.info("Proceeding in simulation mode due to model loading failure.")
         
     except Exception as e:
         logger.error(f"Failed to load model: {e}")
@@ -183,13 +194,29 @@ async def analyze(
 
     try:
         # --- MODEL INFERENCE ---
-        # If we had the real model loaded:
         if model and processor:
-            # inputs = processor(text=full_prompt, images=pil_image, return_tensors="pt").to(DEVICE)
-            # generate_ids = model.generate(**inputs, max_new_tokens=512)
-            # output_text = processor.batch_decode(generate_ids, skip_special_tokens=True)[0]
-            # response_json = parse_llm_json(output_text)
-            pass
+            inputs = processor(text=full_prompt, images=pil_image, return_tensors="pt").to(DEVICE)
+            input_len = inputs["input_ids"].shape[-1]
+            
+            with torch.inference_mode():
+                generation = model.generate(**inputs, max_new_tokens=512, do_sample=False)
+                generation = generation[0][input_len:]
+                output_text = processor.decode(generation, skip_special_tokens=True)
+            
+            # Simple JSON extraction from model output
+            try:
+                # Find the first { and last } to extract JSON
+                start_idx = output_text.find('{')
+                end_idx = output_text.rfind('}') + 1
+                if start_idx != -1 and end_idx != -1:
+                    json_str = output_text[start_idx:end_idx]
+                    response_json = json.loads(json_str)
+                else:
+                    # Fallback if no JSON structure found
+                    response_json = {"imageFindings": output_text, "uncertainty": "Format Error"}
+            except Exception as json_e:
+                logger.error(f"JSON Parse Error: {json_e}")
+                response_json = {"imageFindings": output_text, "error": "Analysis generated but failed to parse JSON."}
         else:
              # --- SIMULATED INFERENCE (FALLBACK for Dev/No-GPU) ---
              # This ensures the API works even without downloading the 10GB+ weights immediately

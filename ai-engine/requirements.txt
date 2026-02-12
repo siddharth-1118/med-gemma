@@ -12,3 +12,4 @@ numpy
 scikit-image
 python-multipart
 python-dotenv
+bitsandbytes
