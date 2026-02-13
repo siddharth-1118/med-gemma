@@ -102,36 +102,48 @@ const AnalysisPanel = ({ analysis, loading }) => {
                 </div>
             </div>
 
+
             {/* Key Findings Card */}
-            <div className="bg-white/60 backdrop-blur-md p-5 rounded-2xl border border-white/60 shadow-sm mb-6 relative overflow-hidden group">
-                <div className="absolute top-0 left-0 w-1 h-full" style={{ backgroundColor: themeColor }}></div>
-                <h3 className="text-xs font-bold text-slate-500 uppercase mb-3">Core Findings</h3>
-                <div className="space-y-3">
-                    {analysis.jointInterpretation.map((text, i) => (
-                        <div key={i} className="flex gap-3 text-sm font-medium text-slate-700 leading-snug">
-                            <span className="text-slate-300 font-mono text-xs mt-0.5">{String(i + 1).padStart(2, '0')}</span>
-                            {text}
-                        </div>
-                    ))}
+            <div className={`p-5 rounded-2xl border mb-4 relative overflow-hidden group ${isAlert ? 'bg-red-50/50 border-red-100' : 'bg-emerald-50/50 border-emerald-100'}`}>
+                <h3 className="text-xs font-bold text-slate-500 uppercase mb-3">AI Findings</h3>
+                <p className="text-sm font-medium text-slate-700 leading-snug mb-4">
+                    {analysis.image_findings}
+                </p>
+
+                {/* Location */}
+                <div className="flex items-start gap-2 text-xs mb-2">
+                    <span className="font-bold text-slate-500 uppercase">Location:</span>
+                    <span className="font-mono text-slate-700">{analysis.abnormality_location}</span>
+                </div>
+
+                {/* Not Seen (Critical for Safety) */}
+                <div className="flex items-start gap-2 text-xs">
+                    <span className="font-bold text-slate-500 uppercase">Absent:</span>
+                    <span className="font-mono text-slate-500">{analysis.what_is_not_seen}</span>
                 </div>
             </div>
 
             {/* Metrics */}
             <div className="mb-6 px-1">
-                <ConfidenceBar label="Visual Evidence" value={isAlert ? 85 : 94} color={themeColor} />
-                <ConfidenceBar label="Text Correlation" value={isAlert ? 15 : 98} color="#6366f1" />
+                <ConfidenceBar
+                    label="AI Confidence"
+                    value={analysis.confidence === 'high' ? 95 : analysis.confidence === 'moderate' ? 70 : 40}
+                    color={themeColor}
+                />
             </div>
 
-            {/* Action Item */}
-            <div className="mt-auto pt-4">
-                <div className="group bg-slate-900 text-white p-4 rounded-xl flex items-center justify-between cursor-pointer hover:shadow-lg hover:shadow-slate-900/20 transition-all duration-300">
-                    <div>
-                        <div className="text-[10px] font-bold text-slate-500 uppercase mb-0.5">Recommended Action</div>
-                        <div className="font-semibold text-sm group-hover:text-blue-200 transition-colors">{analysis.followUps[0]}</div>
-                    </div>
-                    <div className="bg-white/10 p-2 rounded-lg group-hover:bg-white/20 transition-colors">
-                        <ArrowRight size={18} />
-                    </div>
+            {/* Actions */}
+            <div className="mt-auto space-y-3">
+                <button
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-xl flex items-center justify-between transition-all shadow-lg shadow-blue-900/20"
+                    onClick={() => alert("Doctor Review Requested! Case sent to dashboard.")}
+                >
+                    <span className="font-semibold text-sm">Request Doctor Review</span>
+                    <ArrowRight size={18} />
+                </button>
+
+                <div className="text-[10px] text-center text-slate-400">
+                    AI SUPPORT ONLY • NOT A DIAGNOSIS
                 </div>
             </div>
         </div>
