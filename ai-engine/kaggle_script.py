@@ -1,178 +1,198 @@
 
-# MedGemma / PaliGemma Inference Server (Memory-Efficient Version)
-# Upload this script to a Kaggle Notebook or Google Colab with GPU support.
+# ============================================================
+# MedGemma Kaggle AI Engine - FastAPI Server (FINAL VERSION)
+# ============================================================
+# INSTRUCTIONS:
+# 1. Create a Kaggle Notebook with GPU T4 x2
+# 2. Set these Kaggle Secrets:
+#    - HF_TOKEN        : HuggingFace token (must have medgemma access)
+#    - NGROK_AUTH_TOKEN: ngrok auth token (free at ngrok.com)
+#    - GEMINI_API_KEY  : Google Gemini API key
+# 3. Paste this entire script into a cell and run it
+# 4. Copy the printed VITE_AI_SERVICE_URL into your .env file
+# ============================================================
 
-import os
-import sys
-import subprocess
-import json
+import os, sys, json, io, subprocess, asyncio
+
+# --- INSTALL ---
+subprocess.run([sys.executable, "-m", "pip", "install", "-q",
+    "fastapi", "uvicorn", "python-multipart", "pyngrok", "nest_asyncio",
+    "transformers", "accelerate", "bitsandbytes",
+    "google-generativeai", "pillow"
+])
+
+import torch, re
 from PIL import Image
+import google.generativeai as genai
+import nest_asyncio
+nest_asyncio.apply()
+from transformers import AutoProcessor, AutoModelForImageTextToText, BitsAndBytesConfig
+from fastapi import FastAPI, UploadFile, File, Form, WebSocket, WebSocketDisconnect
+from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
+from pyngrok import ngrok, conf
 
-# Ensure required libraries are installed
+# --- AUTH ---
+HF_TOKEN = NGROK_TOKEN = GEMINI_API_KEY = None
 try:
-    import torch
-    import gradio as gr
-    from transformers import AutoProcessor, PaliGemmaForConditionalGeneration, BitsAndBytesConfig
-    from huggingface_hub import login
-    import bitsandbytes as bnb
-    from dotenv import load_dotenv
-    load_dotenv()
     from kaggle_secrets import UserSecretsClient
-    from pyngrok import ngrok, conf
-except ImportError:
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "torch", "transformers", "gradio", "pillow", "accelerate", "huggingface_hub", "bitsandbytes", "-U", "python-dotenv", "pyngrok"])
-    import torch
-    import gradio as gr
-    from transformers import AutoProcessor, PaliGemmaForConditionalGeneration, BitsAndBytesConfig
-    from huggingface_hub import login
-    import bitsandbytes as bnb
-    from dotenv import load_dotenv
-    load_dotenv()
-    from kaggle_secrets import UserSecretsClient
-    from pyngrok import ngrok, conf
+    secrets = UserSecretsClient()
+    HF_TOKEN = secrets.get_secret("HF_TOKEN")
+    NGROK_TOKEN = secrets.get_secret("NGROK_AUTH_TOKEN")
+    GEMINI_API_KEY = secrets.get_secret("GEMINI_API_KEY")
+    print("✅ All secrets loaded.")
+except Exception as e:
+    print(f"⚠️ Secrets error: {e}")
 
+if GEMINI_API_KEY:
+    genai.configure(api_key=GEMINI_API_KEY)
+    print("✅ Gemini configured.")
 
-# --- AUTHENTICATION ---
-# --- AUTHENTICATION ---
-HF_TOKEN = os.getenv("HF_TOKEN")
+# --- MODEL ---
+MODEL_ID = "google/medgemma-1.5-4b-it"
+device = "cuda" if torch.cuda.is_available() else "cpu"
+print(f"🔧 Device: {device}")
 
-if not HF_TOKEN:
-    try:
-        from kaggle_secrets import UserSecretsClient
-        user_secrets = UserSecretsClient()
-        HF_TOKEN = user_secrets.get_secret("HF_TOKEN")
-        print("✅ Found HF_TOKEN in Kaggle Secrets.")
-    except Exception:
-        print("⚠️ Kaggle Secret not found / Not running on Kaggle.")
+model = processor = None
 
-# Fallback (Optional - ideally use .env)
-if not HF_TOKEN:
-    # Manual fallback if needed, otherwise leave None
-    # HF_TOKEN = "hf_..." 
-    pass
-    
 if HF_TOKEN:
+    from huggingface_hub import login
     try:
         login(token=HF_TOKEN)
-        print("Logged in to Hugging Face successfully.")
-    except Exception as e:
-        print(f"Login failed: {e}")
-        HF_TOKEN = None
-else:
-    print("⚠️ No HF_TOKEN found. Using Mock mode.")
-
-
-# --- MODEL CONFIGURATION (With 8-bit Loading for Memory Savings) ---
-MODEL_ID = "google/paligemma-3b-mix-224"
-device = "cuda" if torch.cuda.is_available() else "cpu"
-
-model = None
-processor = None
-
-if HF_TOKEN:
-    print(f"Loading REAL model: {MODEL_ID}...")
-    try:
-        # 8-bit Quantization Config (Critical for Kaggle T4 GPU)
-        quantization_config = BitsAndBytesConfig(load_in_8bit=True)
-        
-        processor = AutoProcessor.from_pretrained(MODEL_ID)
-        
-        # Load model in 8-bit mode
-        model = PaliGemmaForConditionalGeneration.from_pretrained(
-            MODEL_ID,
-            quantization_config=quantization_config,
-            device_map="auto"
+        print(f"📦 Loading {MODEL_ID}...")
+        quant = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_compute_dtype=torch.bfloat16)
+        processor = AutoProcessor.from_pretrained(MODEL_ID, token=HF_TOKEN)
+        model = AutoModelForImageTextToText.from_pretrained(
+            MODEL_ID, quantization_config=quant, device_map="auto", token=HF_TOKEN
         )
-        print("✅ REAL Model loaded successfully (8-bit Quantized)!")
+        model.eval()
+        print("✅ MedGemma-1.5-4b-it loaded (4-bit)!")
     except Exception as e:
-        print(f"❌ Failed to load REAL model: {e}")
-        print("Falling back to Mock Mode.")
+        print(f"❌ Model load failed: {e} → using Gemini fallback")
+else:
+    print("⚠️ No HF_TOKEN → Gemini fallback only")
 
-def analyze_image(image, prompt):
-    if image is None:
-        return json.dumps({"error": "No image provided"})
-    
+# --- APP ---
+app = FastAPI(title="MedGemma AI Engine")
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+
+@app.get("/")
+def root():
+    return {"service": "MedGemma Kaggle AI Engine", "status": "online",
+            "model": MODEL_ID if model else "Gemini Fallback", "device": device,
+            "endpoints": ["/analyze", "/symptom_analysis", "/ws/chat", "/health"]}
+
+@app.get("/health")
+def health():
+    return {"status": "healthy", "model": MODEL_ID if model else "Gemini Fallback", "device": device}
+
+def _local_inference(image: Image.Image, prompt: str) -> dict:
+    image = image.convert("RGB")
+    messages = [{"role": "user", "content": [
+        {"type": "image", "image": image},
+        {"type": "text", "text": f"You are a medical AI. Analyze this image.\n\nContext: {prompt}\n\nReturn JSON with keys: image_findings, confidence, uncertainties, followUps. Be specific and detailed."}
+    ]}]
+    inputs = processor.apply_chat_template(
+        messages, add_generation_prompt=True, tokenize=True,
+        return_dict=True, return_tensors="pt"
+    ).to(model.device, dtype=torch.bfloat16)
+    input_len = inputs["input_ids"].shape[-1]
+    with torch.inference_mode():
+        out = model.generate(**inputs, max_new_tokens=512, do_sample=False, temperature=1.0)
+    decoded = processor.decode(out[0][input_len:], skip_special_tokens=True).strip()
     try:
-        if prompt is None or prompt.strip() == "":
-            prompt = "describe the findings in this chest x-ray including any abnormalities"
+        m = re.search(r'\{.*\}', decoded, re.DOTALL)
+        if m: return json.loads(m.group())
+    except: pass
+    return {"image_findings": decoded, "confidence": "High (MedGemma-1.5-4b-it GPU)",
+            "uncertainties": "Clinical correlation recommended.", "followUps": ["Verify with radiologist"]}
 
-        decoded = ""
-        clinical_context = ""
-        ai_confidence = ""
-
-        if model:
-            # 🧠 REAL AI LOGIC
-            image = image.convert("RGB")
-            inputs = processor(text=prompt, images=image, return_tensors="pt").to("cuda") # Inputs to CUDA
-            input_len = inputs["input_ids"].shape[-1]
-            
-            with torch.inference_mode():
-                generation = model.generate(**inputs, max_new_tokens=200, do_sample=False)
-                generation = generation[0][input_len:]
-                decoded = processor.decode(generation, skip_special_tokens=True)
-            
-            ai_confidence = "High (Run on PaliGemma 8-bit)"
-            clinical_context = "Analysis generated by Google PaliGemma-3b-mix (Quantized)."
-        else:
-            # 🎭 MOCK AI LOGIC (Fallback)
-            decoded = f"Simulated Analysis: {prompt}. Findings suggest consolidation consistent with pneumonia. (Mock Mode)"
-            ai_confidence = "Mock (Real Model Failed)"
-            clinical_context = "Analysis generated by Mock Fallback."
-
-        response = {
-            "jointInterpretation": [
-                decoded,
-                f"AI Confidence: {ai_confidence}"
-            ],
-            "clinicalContext": clinical_context,
-            "uncertainties": "Clinical correlation recommended.",
-            "followUps": ["Verify findings with radiologist"],
-            "isInconsistent": False
-        }
-        return json.dumps(response)
-
-    except Exception as e:
-        return json.dumps({"error": str(e)})
-
-# Create Gradio Interface
-demo = gr.Interface(
-    fn=analyze_image,
-    inputs=[
-        gr.Image(type="pil", label="Upload X-Ray"),
-        gr.Textbox(label="Prompt", value="describe the findings in this chest x-ray")
-    ],
-    outputs=gr.JSON(label="Analysis Result"),
-    title="MedGemma AI Analysis",
-    description="Backend for MedGemma App. Uses PaliGemma-3b-mix (8-bit) if token is present."
-)
-
-if __name__ == "__main__":
-    print("Starting Gradio Server...")
-    
-    # --- NGROK SETUP (Optional) ---
-    # Attempt to get Ngrok token from Env or Kaggle Secrets
-    NGROK_TOKEN = os.getenv("NGROK_AUTH_TOKEN")
-    if not NGROK_TOKEN:
+def _gemini_inference(image: Image.Image, prompt: str) -> dict:
+    for m in ["gemini-2.0-flash", "gemini-2.0-flash-lite", "gemini-1.5-flash"]:
         try:
-            NGROK_TOKEN = user_secrets.get_secret("NGROK_AUTH_TOKEN")
-        except:
-            pass
-            
-    # Fallback if not found
-    if not NGROK_TOKEN:
-        NGROK_TOKEN = "39OE32a2Rac9K1ehHHFFkRjtbLy_xBzApVQzTBhpJQUYyfmk"
+            gm = genai.GenerativeModel(m)
+            p = f"""You are a medical radiologist AI. Analyze this medical image.
+Clinical context: {prompt}
+Return ONLY valid JSON (no markdown) with keys:
+- image_findings: detailed paragraph of findings (min 3 sentences)
+- confidence: high/moderate/low
+- uncertainties: what is absent or unclear
+- followUps: list of recommended actions"""
+            resp = gm.generate_content([p, image])
+            text = resp.text.strip().replace("```json","").replace("```","").strip()
+            try: return json.loads(text)
+            except:
+                m2 = re.search(r'\{.*\}', text, re.DOTALL)
+                if m2: return json.loads(m2.group())
+        except Exception as e:
+            print(f"{m} failed: {e}")
+    return {"image_findings": "Analysis unavailable. Check Gemini API key.", "confidence": "low",
+            "uncertainties": "API error", "followUps": ["Check Kaggle Secrets"]}
 
-    if NGROK_TOKEN:
-        print("🔗 Ngrok key found. Setting up ngrok tunnel...")
-        conf.get_default().auth_token = NGROK_TOKEN
-        # Open a tunnel to the default Gradio port
-        public_url = ngrok.connect(7860).public_url
-        print(f"✅ Ngrok Tunnel Active: {public_url}")
-        print(f"👉 COPY THIS URL to your .env file as AI_SERVICE_URL")
-        
-        # Launch without sharing, since ngrok handles it
-        demo.launch(share=False, debug=True, server_port=7860)
-    else:
-        print("⚠️ No NGROK_AUTH_TOKEN found. Falling back to default Gradio Share.")
-        print("Note: Gradio Share links expire in 72 hours.")
-        demo.launch(share=True, debug=True)
+@app.post("/analyze")
+async def analyze(image: UploadFile = File(...), prompt: str = Form("")):
+    try:
+        pil = Image.open(io.BytesIO(await image.read()))
+        if not prompt: prompt = "Describe the medical findings in this image."
+        result = _local_inference(pil, prompt) if (model and processor) else _gemini_inference(pil, prompt)
+        return result
+    except Exception as e:
+        return {"error": str(e), "image_findings": "Analysis failed."}
+
+@app.post("/symptom_analysis")
+async def symptom_analysis(problem: str = Form(...)):
+    for m in ["gemini-2.0-flash", "gemini-2.0-flash-lite", "gemini-1.5-flash"]:
+        try:
+            gm = genai.GenerativeModel(m)
+            p = f"""Medical AI. Patient says: "{problem}"
+Return ONLY valid JSON with keys:
+- why: detailed medical explanation (2-3 paragraphs)
+- what_to_do: numbered list of actionable steps
+- red_flags: list of emergency warning signs"""
+            resp = gm.generate_content(p)
+            text = resp.text.strip().replace("```json","").replace("```","").strip()
+            return json.loads(text)
+        except Exception as e:
+            print(f"Symptom {m} failed: {e}")
+    return {"why": "Unable to analyze.", "what_to_do": ["See a doctor"], "red_flags": ["Difficulty breathing", "Chest pain"]}
+
+def _chat_response(message: str) -> str:
+    for m in ["gemini-2.0-flash", "gemini-2.0-flash-lite", "gemini-1.5-flash"]:
+        try:
+            gm = genai.GenerativeModel(m)
+            return gm.generate_content(f"You are a medical AI. Answer safely: {message}").text
+        except: continue
+    return "I'm having trouble connecting. Please try again."
+
+@app.websocket("/ws/chat")
+async def ws_chat(websocket: WebSocket):
+    await websocket.accept()
+    await websocket.send_text("AI Assistant: Hello! I'm MedGemma (Kaggle GPU). How can I help?")
+    try:
+        while True:
+            data = await websocket.receive_text()
+            await websocket.send_text(f"Patient: {data}")
+            resp = await asyncio.get_event_loop().run_in_executor(None, _chat_response, data)
+            await websocket.send_text(f"AI Assistant: {resp}")
+    except WebSocketDisconnect:
+        pass
+
+# --- START ---
+PORT = 8000
+print("\n" + "="*60)
+print("🚀 Starting MedGemma Kaggle AI Engine...")
+print("="*60)
+
+if NGROK_TOKEN:
+    conf.get_default().auth_token = NGROK_TOKEN
+    tunnel = ngrok.connect(PORT, "http")
+    url = tunnel.public_url
+    print(f"\n✅ Ngrok Active! Paste this into .env:\n")
+    print(f"   VITE_AI_SERVICE_URL={url}\n")
+    print("👉 Then restart: npm run dev")
+    print("="*60 + "\n")
+
+config = uvicorn.Config(app, host="0.0.0.0", port=PORT, log_level="info")
+server = uvicorn.Server(config)
+print(f"✅ Starting server on port {PORT}...")
+asyncio.get_event_loop().run_until_complete(server.serve())

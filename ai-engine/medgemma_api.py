@@ -24,6 +24,7 @@ from transformers import (
     BitsAndBytesConfig,
     pipeline
 )
+import ethical_ai_logic as ethical
 
 # --- CONFIGURATION ---
 MODEL_ID = "google/medgemma-1.5-4b-it" 
@@ -290,10 +291,48 @@ async def analyze(
     }
 
     try:
-        # --- MODEL INFERENCE ---
+        # --- MODEL INFERENCE: 4-STEP ETHICAL PROTOCOL ---
         if model and processor:
-            # Construct strict prompt
-            full_prompt = MEDICAL_SYSTEM_PROMPT
+            # STEP 1: GATEKEEPER (Intent Classification)
+            # Use a smaller max_new_tokens for classification
+            gatekeeper_inputs = processor(text=ethical.INTENT_CLASSIFICATION_PROMPT + f"\nUser Request: {prompt}", images=pil_image, return_tensors="pt").to(DEVICE)
+            gatekeeper_input_len = gatekeeper_inputs["input_ids"].shape[-1]
+            
+            with torch.inference_mode():
+                gatekeeper_gen = model.generate(**gatekeeper_inputs, max_new_tokens=20, do_sample=False)
+                category_output = processor.decode(gatekeeper_gen[0][gatekeeper_input_len:], skip_special_tokens=True).strip()
+            
+            logger.info(f"Ethical AI - Step 1 Classification: {category_output}")
+            
+            # Extract category letter (A, B, C, etc.)
+            category = "A" # Default to safe
+            for letter in "ABCDEFGHI":
+                if category_output.startswith(letter):
+                    category = letter
+                    break
+            
+            # STEP 2: ROUTER
+            if category != "A":
+                refusal_prompt = ethical.REFUSAL_PROMPTS.get(category, ethical.REFUSAL_PROMPTS["B"])
+                refusal_inputs = processor(text=refusal_prompt, images=pil_image, return_tensors="pt").to(DEVICE)
+                refusal_input_len = refusal_inputs["input_ids"].shape[-1]
+                
+                with torch.inference_mode():
+                    refusal_gen = model.generate(**refusal_inputs, max_new_tokens=200, do_sample=False)
+                    refusal_text = processor.decode(refusal_gen[0][refusal_input_len:], skip_special_tokens=True).strip()
+                
+                return JSONResponse(content={
+                    "image_type": "medical",
+                    "image_findings": refusal_text,
+                    "abnormality_location": "N/A (Refusal)",
+                    "confidence": "high",
+                    "what_is_not_seen": "N/A",
+                    "limitations": f"Safety Trigger: Category {category}",
+                    "suggested_review": ["Consult Professional Resources"]
+                })
+            
+            # STEP 3: CLINICAL SUPPORT (CATEGORY A confirmed)
+            full_prompt = ethical.CLINICAL_SUPPORT_PROMPT + f"\nClinical Note: {prompt}"
             
             inputs = processor(text=full_prompt, images=pil_image, return_tensors="pt").to(DEVICE)
             input_len = inputs["input_ids"].shape[-1]
@@ -303,23 +342,29 @@ async def analyze(
                 generation = generation[0][input_len:]
                 output_text = processor.decode(generation, skip_special_tokens=True)
             
-            # Simple JSON extraction from model output
-            try:
-                # Find the first { and last } to extract JSON
-                start_idx = output_text.find('{')
-                end_idx = output_text.rfind('}') + 1
-                if start_idx != -1 and end_idx != -1:
-                    json_str = output_text[start_idx:end_idx]
-                    response_json = json.loads(json_str)
-                else:
-                    # Fallback if no JSON structure found
-                    logger.warning(f"Could not parse JSON from model output. Using metadata. Output: {output_text}")
-                    # Optionally append model output to findings if appropriate, or just log
-            except Exception as json_e:
-                logger.error(f"JSON Parse Error: {json_e}")
+            logger.info("Ethical AI - Step 3 Analysis Complete.")
+
+            # STEP 4: OUTPUT VALIDATION
+            validation_inputs = processor(text=ethical.OUTPUT_VALIDATION_PROMPT + f"\nModel Response to Validate:\n{output_text}", return_tensors="pt").to(DEVICE)
+            # Validation is text-only usually, but PaliGemma expects images if its the same processor config
+            # We'll use the same image to keep it simple for the vision-language model
+            validation_inputs = processor(text=ethical.OUTPUT_VALIDATION_PROMPT + f"\nModel Response:\n{output_text}", images=pil_image, return_tensors="pt").to(DEVICE)
+            val_input_len = validation_inputs["input_ids"].shape[-1]
+            
+            with torch.inference_mode():
+                val_gen = model.generate(**validation_inputs, max_new_tokens=512, do_sample=False)
+                validated_text = processor.decode(val_gen[0][val_input_len:], skip_special_tokens=True).strip()
+
+            logger.info("Ethical AI - Step 4 Validation Complete.")
+            
+            # Update response_json with structured analysis or validated text
+            # We try to parse it as the 5-point structure
+            response_json["image_findings"] = validated_text
+            response_json["limitations"] = "Validated by Ethical AI Layer (4-Step Protocol)."
+            
     except Exception as e:
-        logger.error(f"Inference/Cleanup failed: {e}")
-        # Build safe fallback or stick with mock
+        logger.error(f"Ethical Pipeline Failure: {e}")
+        # Falls back to hash-based mock logic already defined in response_json
     
     return JSONResponse(content=response_json)
 

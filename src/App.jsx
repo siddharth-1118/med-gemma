@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Upload, FileText, Activity, User, Stethoscope, AlertCircle, CheckCircle, Image as ImageIcon, ArrowRight, Edit2, Play, Download, RefreshCw, ZoomIn, ZoomOut, ChevronRight, Loader2, ShieldCheck, Thermometer, Info, Moon, Sun } from 'lucide-react';
+import { Upload, FileText, Activity, User, Stethoscope, AlertCircle, CheckCircle, Image as ImageIcon, ArrowRight, Edit2, Play, Download, RefreshCw, ZoomIn, ZoomOut, ChevronRight, Loader2, ShieldCheck, Thermometer, Info, Moon, Sun, MessageSquare, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import BackgroundVFX from './components/BackgroundVFX';
+import ChatPanel from './components/ChatPanel';
 
 function App() {
   const [step, setStep] = useState(1);
@@ -12,8 +13,14 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [zoom, setZoom] = useState(1);
-  const [contrast, setContrast] = useState(100);
+  const [contrast] = useState(100);
+  const [activeTab, setActiveTab] = useState('analysis');
+  const [medicalActiveTab, setMedicalActiveTab] = useState('symptoms'); // New for Symptom/AI/Doctor
   const [darkMode, setDarkMode] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+  const [symptomQuery, setSymptomQuery] = useState('');
+  const [symptomResult, setSymptomResult] = useState(null);
+  const [symptomLoading, setSymptomLoading] = useState(false);
 
   useEffect(() => {
     if (darkMode) {
@@ -35,6 +42,27 @@ function App() {
 
   const fileInputRef = useRef(null);
   const handleInputChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  
+  const handleSymptomAnalysis = async () => {
+    if (!symptomQuery) return;
+    setSymptomLoading(true);
+    const API_URL = import.meta.env.VITE_AI_SERVICE_URL || '';
+    try {
+      const endpoint = API_URL ? `${API_URL}/symptom_analysis` : `/symptom_analysis`;
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ problem: symptomQuery }),
+      });
+      const data = await response.json();
+      setSymptomResult(data);
+    } catch (err) {
+      console.error("Symptom Analysis Error:", err);
+      setSymptomResult({ why: 'Connection error. Is the AI service running?', what_to_do: [], red_flags: [] });
+    } finally {
+      setSymptomLoading(false);
+    }
+  };
   const processFile = (selectedFile) => {
     if (selectedFile) {
       setFile(selectedFile);
@@ -79,14 +107,18 @@ function App() {
       data.append('prompt', clinicalPrompt);
       data.append('caseId', 'custom');
 
-      // Call the Node.js server (which proxies to the Python AI engine)
-      const response = await fetch('http://localhost:3000/api/analyze', {
+      // Call backend: use absolute URL when remote AI service is configured
+      const API_URL = import.meta.env.VITE_AI_SERVICE_URL || '';
+      const endpoint = API_URL ? `${API_URL}/analyze` : `/analyze`;
+      console.log(`Sending Analysis Request to: ${endpoint}`);
+      
+      const response = await fetch(endpoint, {
         method: 'POST',
         body: data,
       });
 
       if (!response.ok) {
-        throw new Error(`Server Error: ${response.statusText}`);
+        throw new Error(`Server Error: ${response.status} ${response.statusText}`);
       }
 
       const resData = await response.json();
@@ -95,7 +127,7 @@ function App() {
       setStep(3); // Move to results step
     } catch (err) {
       console.error("Analysis Error:", err);
-      alert(`Analysis failed: ${err.message}. Please ensure the backend server and AI engine are running.`);
+      alert(`Analysis failed: ${err.message}. \n\nCheck browser console (F12) for network details.`);
     } finally {
       setLoading(false);
     }
@@ -392,12 +424,14 @@ function App() {
                 </div>
                 <div className="flex-1 relative flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#0B1220] to-black">
                   <img src={preview} className="max-w-full max-h-full object-contain transition-transform duration-200" style={{ transform: `scale(${zoom})`, filter: `contrast(${contrast}%)` }} />
-                  <motion.div
-                    variants={breathingRing} animate="animate"
-                    className="absolute top-[40%] right-[30%] w-32 h-32 rounded-full border-2 border-[#FF9F1C]"
-                  >
-                    <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#FF9F1C] text-black text-[10px] font-black px-2 py-0.5 rounded shadow-lg uppercase">Attention Region</div>
-                  </motion.div>
+                  {result?.image_findings && (
+                    <motion.div
+                      variants={breathingRing} animate="animate"
+                      className="absolute top-[40%] right-[30%] w-32 h-32 rounded-full border-2 border-[#FF9F1C]"
+                    >
+                      <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#FF9F1C] text-black text-[10px] font-black px-2 py-0.5 rounded shadow-lg uppercase">Attention Region</div>
+                    </motion.div>
+                  )}
                 </div>
                 <div className="bg-[#0B1220] p-3 flex justify-between border-t border-white/5">
                   <div className="flex gap-2 text-white/50">
@@ -410,45 +444,136 @@ function App() {
                 </div>
               </div>
 
-              {/* Analysis */}
+              {/* Analysis & Chat Tabs */}
               <div className="flex flex-col gap-4 h-full">
                 <div className="flex-1 bg-white dark:bg-[#121A2F] rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl flex flex-col overflow-hidden">
-                  <div className="bg-white dark:bg-[#121A2F] px-6 py-5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
-                    <span className="font-bold flex items-center gap-2 text-[#1F4FD8] dark:text-white text-lg"><Activity size={20} className="text-[#4F8CFF]" /> AI Joint Analysis</span>
-                    <span className="text-[10px] bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-100 px-2 py-1 rounded font-black tracking-widest uppercase">Confidence: 98%</span>
+                  <div className="bg-white dark:bg-[#121A2F] border-b border-slate-100 dark:border-slate-800 flex overflow-hidden">
+                    <button 
+                      onClick={() => setActiveTab('analysis')}
+                      className={`flex-1 py-4 text-[11px] uppercase tracking-wider font-black transition-all flex flex-col items-center justify-center gap-1 ${activeTab === 'analysis' ? 'bg-[#1F4FD8] text-white' : 'text-slate-500 hover:bg-slate-50 dark:hover:bg-white/5'}`}
+                    >
+                      <Activity size={16} /> Analysis
+                    </button>
+                    <button 
+                      onClick={() => setActiveTab('symptoms')}
+                      className={`flex-1 py-4 text-[11px] uppercase tracking-wider font-black transition-all flex flex-col items-center justify-center gap-1 ${activeTab === 'symptoms' ? 'bg-[#2EC4B6] text-white' : 'text-slate-500 hover:bg-slate-50 dark:hover:bg-white/5'}`}
+                    >
+                      <Info size={16} /> Symptom Guide
+                    </button>
+                    <button 
+                      onClick={() => setActiveTab('chat')}
+                      className={`flex-1 py-4 text-[11px] uppercase tracking-wider font-black transition-all flex flex-col items-center justify-center gap-1 ${activeTab === 'chat' ? 'bg-purple-600 text-white' : 'text-slate-500 hover:bg-slate-50 dark:hover:bg-white/5'}`}
+                    >
+                      <MessageSquare size={16} /> AI Consult
+                    </button>
+                    <button 
+                      onClick={() => setActiveTab('doctors')}
+                      className={`flex-1 py-4 text-[11px] uppercase tracking-wider font-black transition-all flex flex-col items-center justify-center gap-1 ${activeTab === 'doctors' ? 'bg-[#FF9F1C] text-white' : 'text-slate-500 hover:bg-slate-50 dark:hover:bg-white/5'}`}
+                    >
+                      <Stethoscope size={16} /> Doctors
+                    </button>
                   </div>
 
-                  {/* Text Reveal Logic - Updated for 5-Step Data */}
-                  <motion.div variants={staggerText} initial="initial" animate="animate" className="p-6 overflow-y-auto space-y-6 custom-scrollbar flex-1 bg-slate-50/50 dark:bg-[#0B1220]/50">
-
-                    <motion.div variants={textLine} className="bg-white dark:bg-[#121A2F] p-5 rounded-xl border border-slate-200 dark:border-slate-800 border-l-4 border-l-[#1F4FD8] shadow-sm hover:shadow-md transition-shadow">
-                      <h4 className="flex items-center gap-2 text-sm font-bold text-[#1F4FD8] uppercase tracking-wider mb-3"><Activity size={16} /> Image Findings</h4>
-                      <ul className="list-disc ml-4 space-y-1">
-                        {result?.imageFindings?.map((f, i) => (
-                          <li key={i} className="text-sm font-medium leading-relaxed dark:text-slate-200">{f}</li>
-                        )) || <li className="text-sm">Processing image data...</li>}
-                      </ul>
-                    </motion.div>
-
-                    <motion.div variants={textLine} className="bg-white dark:bg-[#121A2F] p-5 rounded-xl border border-slate-200 dark:border-slate-800 border-l-4 border-l-[#2EC4B6] shadow-sm hover:shadow-md transition-shadow">
-                      <h4 className="flex items-center gap-2 text-sm font-bold text-[#2EC4B6] uppercase tracking-wider mb-3"><User size={16} /> Clinical Correlation</h4>
-                      <p className="text-sm font-medium leading-relaxed dark:text-slate-200">{result?.correlation}</p>
-                    </motion.div>
-
-                    <motion.div variants={textLine} className="bg-white dark:bg-[#121A2F] p-5 rounded-xl border border-slate-200 dark:border-slate-800 border-l-4 border-l-[#FF9F1C] shadow-sm hover:shadow-md transition-shadow">
-                      <h4 className="flex items-center gap-2 text-sm font-bold text-[#FF9F1C] uppercase tracking-wider mb-3"><AlertCircle size={16} /> Uncertainties & Negatives</h4>
-                      <p className="text-sm italic text-slate-500 dark:text-slate-400 mb-2">{result?.uncertainties}</p>
-                      <div className="text-xs text-slate-400 border-t pt-2 mt-2">
-                        <strong>Negatives: </strong> {result?.negativeFindings?.join(", ")}
+                  {activeTab === 'analysis' && (
+                    <div className="flex-1 flex flex-col overflow-hidden">
+                      <div className="bg-white dark:bg-[#121A2F] px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center shrink-0">
+                        <span className="font-bold flex items-center gap-2 text-[#1F4FD8] dark:text-white text-lg"><RefreshCw size={20} className="text-[#4F8CFF]" /> AI Result Guide</span>
+                        <span className="text-[10px] bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-100 px-2 py-1 rounded font-black tracking-widest uppercase">Verified Accuracy</span>
                       </div>
-                    </motion.div>
-                  </motion.div>
 
-                  <div className="p-5 bg-white dark:bg-[#121A2F] border-t border-slate-200 dark:border-slate-800">
-                    <motion.button variants={pulseButton} initial="rest" whileHover="hover" whileTap="tap" onClick={() => setStep(4)} className="w-full bg-[#1F4FD8] hover:bg-blue-800 text-white py-4 rounded-xl font-bold shadow-lg shadow-blue-900/20 flex items-center justify-center gap-2">
-                      View Suggested Next Steps <ChevronRight size={20} />
-                    </motion.button>
-                  </div>
+                      <motion.div variants={staggerText} initial="initial" animate="animate" className="p-6 overflow-y-auto space-y-6 custom-scrollbar flex-1 bg-slate-50/50 dark:bg-[#0B1220]/50">
+                        <motion.div variants={textLine} className="bg-white dark:bg-[#121A2F] p-5 rounded-xl border border-slate-200 dark:border-slate-800 border-l-4 border-l-[#1F4FD8] shadow-sm hover:shadow-md transition-shadow">
+                          <h4 className="flex items-center gap-2 text-sm font-bold text-[#1F4FD8] uppercase tracking-wider mb-3"><Activity size={16} /> Image Findings</h4>
+                          <p className="text-sm font-medium leading-relaxed dark:text-slate-200">{result?.image_findings}</p>
+                        </motion.div>
+
+                        <motion.div variants={textLine} className="bg-white dark:bg-[#121A2F] p-5 rounded-xl border border-slate-200 dark:border-slate-800 border-l-4 border-l-[#2EC4B6] shadow-sm hover:shadow-md transition-shadow">
+                          <h4 className="flex items-center gap-2 text-sm font-bold text-[#2EC4B6] uppercase tracking-wider mb-3"><ShieldCheck size={16} /> Limitations</h4>
+                          <p className="text-sm font-medium leading-relaxed dark:text-slate-200">{result?.limitations}</p>
+                        </motion.div>
+
+                        <motion.div variants={textLine} className="bg-white dark:bg-[#121A2F] p-5 rounded-xl border border-slate-200 dark:border-slate-800 border-l-4 border-l-[#FF9F1C] shadow-sm hover:shadow-md transition-shadow">
+                          <h4 className="flex items-center gap-2 text-sm font-bold text-[#FF9F1C] uppercase tracking-wider mb-3"><AlertCircle size={16} /> Uncertainties & Negatives</h4>
+                          <p className="text-sm italic text-slate-500 dark:text-slate-400 mb-2">{result?.what_is_not_seen}</p>
+                        </motion.div>
+                      </motion.div>
+
+                      <div className="p-5 bg-white dark:bg-[#121A2F] border-t border-slate-200 dark:border-slate-800 shrink-0">
+                        <motion.button variants={pulseButton} initial="rest" whileHover="hover" whileTap="tap" onClick={() => setStep(4)} className="w-full bg-[#1F4FD8] hover:bg-blue-800 text-white py-4 rounded-xl font-bold shadow-lg shadow-blue-900/20 flex items-center justify-center gap-2">
+                          View Suggested Next Steps <ChevronRight size={20} />
+                        </motion.button>
+                      </div>
+                    </div>
+                  )}
+
+                  {activeTab === 'symptoms' && (
+                    <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar bg-slate-50 dark:bg-[#0B1220]">
+                      <div className="bg-white dark:bg-[#121A2F] p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <label className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2 block">Tell us what you're feeling</label>
+                        <div className="flex gap-2">
+                          <input 
+                            placeholder="e.g., Sharp chest pain, chronic cough..." 
+                            value={symptomQuery}
+                            onChange={(e) => setSymptomQuery(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleSymptomAnalysis()}
+                            className="flex-1 bg-slate-50 dark:bg-[#0B1220] border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#2EC4B6] transition-all dark:text-white"
+                          />
+                          <button 
+                            onClick={handleSymptomAnalysis}
+                            disabled={symptomLoading}
+                            className="bg-[#2EC4B6] text-white px-4 py-2 rounded-lg font-bold hover:bg-teal-600 transition-all flex items-center gap-2"
+                          >
+                            {symptomLoading ? <Loader2 size={16} className="animate-spin" /> : <ArrowRight size={16} />}
+                          </button>
+                        </div>
+                      </div>
+
+                      {symptomResult ? (
+                        <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                          <div className="bg-white dark:bg-[#121A2F] p-5 rounded-xl border border-l-4 border-l-[#1F4FD8] dark:border-slate-800 shadow-sm">
+                            <h4 className="text-xs font-black text-[#1F4FD8] uppercase mb-2">Why it happens</h4>
+                            <p className="text-sm font-medium dark:text-slate-200 leading-relaxed text-slate-700">{symptomResult.why}</p>
+                          </div>
+                          <div className="bg-white dark:bg-[#121A2F] p-5 rounded-xl border border-l-4 border-l-[#2EC4B6] dark:border-slate-800 shadow-sm">
+                            <h4 className="text-xs font-black text-[#2EC4B6] uppercase mb-2">What you can do</h4>
+                            <p className="text-sm font-medium dark:text-slate-200 leading-relaxed text-slate-700">{symptomResult.what_to_do}</p>
+                          </div>
+                          <div className="bg-red-50 dark:bg-red-900/10 p-5 rounded-xl border border-red-100 dark:border-red-900/30 shadow-sm">
+                            <h4 className="text-xs font-black text-red-500 uppercase mb-2">Emergency Red Flags</h4>
+                            <ul className="text-sm font-medium text-red-700 dark:text-red-200 space-y-1">
+                              {symptomResult.red_flags.map((flag, i) => <li key={i} className="flex items-center gap-2">• {flag}</li>)}
+                            </ul>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="h-48 flex flex-col items-center justify-center text-slate-400 gap-3 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl">
+                          <Info size={32} opacity={0.5} />
+                          <p className="text-sm font-medium italic">Enter symptoms above to get detailed info.</p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {activeTab === 'chat' && (
+                    <div className="flex-1 overflow-hidden p-4 bg-slate-50 dark:bg-[#0B1220]">
+                      <ChatPanel />
+                    </div>
+                  )}
+
+                  {activeTab === 'doctors' && (
+                    <div className="flex-1 p-6 bg-slate-50 dark:bg-[#0B1220] flex flex-col items-center justify-center text-center space-y-6">
+                      <div className="w-20 h-20 bg-[#FF9F1C]/10 rounded-full flex items-center justify-center text-[#FF9F1C]">
+                        <Stethoscope size={40} />
+                      </div>
+                      <div>
+                        <h4 className="text-xl font-bold dark:text-white">Connect with Specialists</h4>
+                        <p className="text-sm text-slate-500 max-w-xs mx-auto mt-2">Based on your results, we recommend consulting a Pulmonologist or Radiologist.</p>
+                      </div>
+                      <button className="bg-[#FF9F1C] text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-[#FF9F1C]/20 hover:scale-105 transition-all">
+                        Schedule Consultation
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -461,24 +586,37 @@ function App() {
                 <h2 className="text-2xl font-bold flex items-center gap-3 relative z-10"><CheckCircle className="text-[#2EC4B6]" size={28} /> Recommended Protocol</h2>
                 <p className="text-slate-400 mt-2 text-sm relative z-10 font-medium">Actionable steps based on multimodal findings.</p>
               </div>
-              <div className="p-8 space-y-4">
-                {[
-                  { text: 'Check oxygen saturation', sub: 'Urgent Verification', color: '#2EC4B6' },
-                  { text: 'Order inflammatory markers', sub: 'Lab Panel Required', color: '#FF9F1C' },
-                  { text: 'Consider follow-up imaging', sub: 'Standard Protocol', color: '#4F8CFF' }
-                ].map((item, i) => (
-                  <motion.div
-                    key={i} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }}
-                    className="flex items-start gap-4 p-5 rounded-xl border cursor-pointer group transition-colors"
-                    style={{ borderColor: `${item.color}40`, backgroundColor: `${item.color}0D` }}
-                  >
-                    <div className="w-8 h-8 rounded-full text-white flex items-center justify-center font-bold text-xs shadow-lg" style={{ backgroundColor: item.color }}>{i + 1}</div>
-                    <div>
-                      <p className="font-bold text-slate-800 dark:text-white transition-colors" style={{ color: item.color }}>{item.text}</p>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">{item.sub}</p>
-                    </div>
-                  </motion.div>
-                ))}
+              <div className="p-8 space-y-6">
+                {/* Key Findings Summary */}
+                <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-5 border border-blue-100 dark:border-blue-800">
+                  <h3 className="text-xs font-black text-blue-600 uppercase tracking-widest mb-2 flex items-center gap-2"><Activity size={14} /> Key Finding</h3>
+                  <p className="text-sm font-medium text-slate-700 dark:text-slate-200 leading-relaxed">{result?.image_findings?.slice(0, 200) || 'Analysis complete.'}{result?.image_findings?.length > 200 ? '...' : ''}</p>
+                  <div className="mt-3 flex items-center gap-2">
+                    <span className={`text-[10px] font-black uppercase px-2 py-1 rounded-full ${result?.confidence === 'high' ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300'}`}>
+                      Confidence: {result?.confidence || 'moderate'}
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-bold uppercase">{result?.abnormality_location || ''}</span>
+                  </div>
+                </div>
+
+                {/* Recommended Actions from Gemini */}
+                {(result?.suggested_review || []).map((item, i) => {
+                  const colors = ['#2EC4B6', '#FF9F1C', '#4F8CFF', '#A855F7', '#EF4444'];
+                  const color = colors[i % colors.length];
+                  return (
+                    <motion.div
+                      key={i} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }}
+                      className="flex items-start gap-4 p-5 rounded-xl border cursor-pointer group transition-colors"
+                      style={{ borderColor: `${color}40`, backgroundColor: `${color}0D` }}
+                    >
+                      <div className="w-8 h-8 rounded-full text-white flex items-center justify-center font-bold text-xs shadow-lg" style={{ backgroundColor: color }}>{i + 1}</div>
+                      <div>
+                        <p className="font-bold text-slate-800 dark:text-white">{item}</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">AI Recommended Action</p>
+                      </div>
+                    </motion.div>
+                  );
+                })}
               </div>
               <div className="px-8 pb-8">
                 <motion.button variants={pulseButton} initial="rest" whileHover="hover" whileTap="tap" onClick={() => setStep(5)} className="w-full bg-[#2EC4B6] hover:bg-teal-600 text-white py-4 rounded-xl font-bold shadow-lg shadow-teal-500/20 flex items-center justify-center gap-2">
@@ -565,11 +703,26 @@ function App() {
                 <div className="p-6 bg-slate-50 dark:bg-[#0B1220] border-t border-slate-200 dark:border-slate-800 flex justify-end gap-4 rounded-b-2xl">
                   <button onClick={() => { setStep(1); setFile(null); }} className="px-6 py-3 text-[#4F8CFF] font-bold bg-white dark:bg-[#121A2F] border border-[#4F8CFF]/30 rounded-xl hover:bg-[#4F8CFF]/5 transition-colors">Start New Case</button>
                   <motion.button variants={pulseButton} initial="rest" whileHover="hover" whileTap="tap" onClick={handleDownloadReport} className="px-8 py-3 bg-[#1F4FD8] text-white font-bold rounded-xl shadow-lg hover:bg-blue-800 transition-colors flex items-center gap-2"><Download size={20} /> Download PDF Report</motion.button>
+                  <motion.button variants={pulseButton} initial="rest" whileHover="hover" whileTap="tap" onClick={() => setShowChat(true)} className="px-8 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold rounded-xl shadow-lg hover:shadow-purple-500/30 transition-all flex items-center gap-2 border border-white/20"><MessageSquare size={20} /> Consult AI Assistant</motion.button>
                 </div>
               </div>
             </motion.div>
           )}
 
+        </AnimatePresence>
+        
+        {/* Chat Panel Overlay */}
+        <AnimatePresence>
+          {showChat && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+              <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="w-full max-w-lg h-[600px] bg-white rounded-2xl shadow-2xl overflow-hidden relative">
+                <button onClick={() => setShowChat(false)} className="absolute top-4 right-4 z-10 p-2 bg-slate-100 hover:bg-slate-200 rounded-full transition-colors"><X size={16} className="text-slate-500" /></button>
+                <div className="h-full pt-2">
+                  <ChatPanel />
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
         </AnimatePresence>
       </main>
     </div>

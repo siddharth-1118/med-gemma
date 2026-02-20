@@ -5,24 +5,30 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List
 import json
-import json
 import logging
 import os
+import asyncio
 
 from . import models, database, auth, ai_service
 
 # Initialize DB
-# Initialize DB
 from dotenv import load_dotenv
-load_dotenv()
-models.Base.metadata.create_all(bind=database.engine)
+from contextlib import asynccontextmanager
 
-# Initialize AI
-# Initialize AI
-ai_service.load_models()
-ai_service.configure_genai(os.getenv("GEMINI_API_KEY"))
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Initialize DB
+    models.Base.metadata.create_all(bind=database.engine)
+    # Initialize AI in background or on startup
+    ai_service.configure_genai(os.getenv("GEMINI_API_KEY"))
+    # ai_service.load_models() # We'll call this but maybe just let it be lazy if needed
+    yield
 
-app = FastAPI(title="MedGemma Collaboration Platform")
+app = FastAPI(title="MedGemma Collaboration Platform", lifespan=lifespan)
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy", "service": "MedGemma AI"}
 
 # CORS
 app.add_middleware(
@@ -83,7 +89,7 @@ async def register_user(username: str = Form(...), password: str = Form(...), ro
 async def analyze_case(
     image: UploadFile = File(...),
     prompt: str = Form(...),
-    token: str = Depends(auth.oauth2_scheme), # Require Auth
+    # token: str = Depends(auth.oauth2_scheme), # Auth temporarily disabled for demo simplicity
     db: Session = Depends(database.get_db)
 ):
     # 1. Image Processing
@@ -105,7 +111,7 @@ async def analyze_case(
     result = ai_service.analyze_with_gemini(pil_image, prompt)
     
     # 4. Create Case in DB
-    user = auth.get_current_user(token, db)
+    # user = auth.get_current_user(token, db)
     # Save image to disk (mock path for now)
     image_path = f"uploads/{image.filename}" 
     # Ensure directory exists in real app
@@ -129,6 +135,19 @@ async def analyze_case(
 
     return result
 
+@app.post("/symptom_analysis")
+async def analyze_symptom(
+    problem: str = Form(...)
+):
+    """
+    Direct endpoint for "Why/How" medical knowledge.
+    """
+    try:
+        knowledge = ai_service.medical_knowledge_lookup(problem)
+        return knowledge
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.get("/cases")
 async def get_cases(db: Session = Depends(database.get_db), current_user: models.User = Depends(auth.get_current_user)):
     cases = db.query(models.Case).all()
@@ -147,10 +166,20 @@ async def get_cases(db: Session = Depends(database.get_db), current_user: models
 async def websocket_endpoint(websocket: WebSocket):
     await manager.connect(websocket)
     try:
+        # Proactive AI Welcome
+        await websocket.send_text("AI Assistant: Hello! I'm MedGemma, your health assistant. How can I help you understand your results today?")
+        
         while True:
             data = await websocket.receive_text()
-            # Broadcast message to all doctors
-            await manager.broadcast(f"Doctor says: {data}")
+            # Broadcast patient message
+            await manager.broadcast(f"Patient: {data}")
+            
+            # AI responds - run in thread to avoid blocking the event loop
+            ai_response = await asyncio.get_event_loop().run_in_executor(
+                None, ai_service.chat_with_ai, data
+            )
+            await manager.broadcast(f"AI Assistant: {ai_response}")
+                
     except WebSocketDisconnect:
         manager.disconnect(websocket)
 

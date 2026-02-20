@@ -1,6 +1,6 @@
-
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, MessageSquare, User } from 'lucide-react';
+import { Send, MessageSquare, User, Bot, Activity, AlertCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const ChatPanel = () => {
     const [messages, setMessages] = useState([]);
@@ -10,17 +10,48 @@ const ChatPanel = () => {
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
-        // Connect to WebSocket
-        ws.current = new WebSocket('ws://localhost:8000/ws/chat');
+        // Route to Kaggle ngrok URL if set, otherwise use local Vite proxy
+        const remoteUrl = import.meta.env.VITE_AI_SERVICE_URL;
+        let wsUrl;
+        if (remoteUrl) {
+            // e.g. https://xxxx.ngrok-free.app -> wss://xxxx.ngrok-free.app/ws/chat
+            wsUrl = remoteUrl.replace('https://', 'wss://').replace('http://', 'ws://') + '/ws/chat';
+        } else {
+            const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            wsUrl = `${proto}//${window.location.host}/ws/chat`;
+        }
+        ws.current = new WebSocket(wsUrl);
 
         ws.current.onopen = () => setStatus('Connected');
         ws.current.onclose = () => setStatus('Disconnected');
         ws.current.onmessage = (event) => {
-            setMessages(prev => [...prev, { text: event.data, sender: 'Other', time: new Date().toLocaleTimeString() }]);
+            const text = event.data;
+            let sender = 'AI Assistant';
+            let content = text;
+
+            if (text.startsWith("Patient: ")) {
+                sender = 'You';
+                content = text.replace("Patient: ", "");
+            } else if (text.startsWith("AI Assistant: ")) {
+                sender = 'MedGemma AI';
+                content = text.replace("AI Assistant: ", "");
+            }
+
+            setMessages(prev => [...prev, { 
+                text: content, 
+                sender: sender, 
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+            }]);
         };
 
         return () => {
-            if (ws.current) ws.current.close();
+            if (ws.current) {
+                // Ensure we don't close it prematurely if it's still in the middle of opening
+                // and the component is just flickering due to StrictMode in dev
+                if (ws.current.readyState === WebSocket.OPEN) {
+                    ws.current.close();
+                }
+            }
         };
     }, []);
 
@@ -32,65 +63,95 @@ const ChatPanel = () => {
         e.preventDefault();
         if (input.trim() && ws.current) {
             ws.current.send(input);
-            // Optimistic update (simulating self-message, though backend broadcasts to all including sender usually)
-            // For this logic, let's assume backend broadcasts "Doctor says: ..."
-            // So we might get double messages if we add here, but let's rely on broadcast for now or handle ID.
-            // Actually main.py broadcasts to ALL. So we will receive our own message.
             setInput('');
         }
     };
 
     return (
-        <div className="flex flex-col h-full bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden">
+        <div className="flex flex-col h-full bg-white dark:bg-[#0B1220] overflow-hidden">
             {/* Header */}
-            <div className="p-4 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                    <MessageSquare size={18} className="text-blue-600" />
-                    <h3 className="font-bold text-slate-700">Doctor Collaboration</h3>
-                </div>
-                <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${status === 'Connected' ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                    <span className="text-xs text-slate-400">{status}</span>
+            <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-[#121A2F]/50 flex justify-between items-center backdrop-blur-md">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800">
+                        <Bot size={22} className="animate-pulse" />
+                    </div>
+                    <div>
+                        <h3 className="font-bold text-slate-800 dark:text-white flex items-center gap-1.5 text-sm uppercase tracking-wider">
+                            AI Health Assistant <Activity size={14} className="text-amber-400" />
+                        </h3>
+                        <div className="flex items-center gap-1.5">
+                            <div className={`w-1.5 h-1.5 rounded-full ${status === 'Connected' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]' : 'bg-red-500'}`}></div>
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{status === 'Connected' ? 'Online & Ready' : 'Connecting...'}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/50">
+            {/* Messages Scroll Area */}
+            <div className="flex-1 overflow-y-auto p-5 space-y-6 bg-slate-50/30 dark:bg-[#05090E]/30 custom-scrollbar">
                 {messages.length === 0 && (
-                    <div className="text-center text-slate-400 text-sm mt-10">
-                        <p>No messages yet.</p>
-                        <p className="text-xs">Start discussing cases with the team.</p>
+                    <div className="h-full flex flex-col items-center justify-center text-center px-10">
+                        <div className="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4 text-slate-400 opacity-20">
+                            <MessageSquare size={32} />
+                        </div>
+                        <h4 className="text-slate-700 dark:text-slate-300 font-bold mb-2">How can I help you today?</h4>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 max-w-[200px] leading-relaxed">
+                            Ask me about your medical scan or any symptoms you're experiencing.
+                        </p>
                     </div>
                 )}
-                {messages.map((msg, idx) => (
-                    <div key={idx} className={`flex flex-col ${msg.text.startsWith("Doctor says:") ? 'items-start' : 'items-end'}`}>
-                        {/* Note: In a real app we'd check sender ID. For now assuming all broadcast messages are 'received' */}
-                        <div className="bg-white p-3 rounded-lg rounded-tl-none shadow-sm border border-slate-100 max-w-[80%]">
-                            <p className="text-sm text-slate-700">{msg.text}</p>
-                        </div>
-                        <span className="text-[10px] text-slate-400 mt-1">{msg.time}</span>
-                    </div>
-                ))}
+                
+                <AnimatePresence>
+                    {messages.map((msg, idx) => (
+                        <motion.div 
+                            key={idx}
+                            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            className={`flex gap-3 ${msg.sender === 'You' ? 'flex-row-reverse' : 'flex-row'}`}
+                        >
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border-2 border-white dark:border-slate-800 shadow-sm ${msg.sender === 'You' ? 'bg-[#1F4FD8] text-white' : 'bg-[#2EC4B6] text-white'}`}>
+                                {msg.sender === 'You' ? <User size={14} /> : <Bot size={14} />}
+                            </div>
+                            
+                            <div className={`flex flex-col max-w-[80%] ${msg.sender === 'You' ? 'items-end' : 'items-start'}`}>
+                                <div className={`p-4 rounded-2xl shadow-sm text-sm leading-relaxed ${
+                                    msg.sender === 'You' 
+                                    ? 'bg-[#1F4FD8] text-white rounded-tr-none' 
+                                    : 'bg-white dark:bg-[#121A2F] text-slate-700 dark:text-slate-200 border border-slate-100 dark:border-slate-800 rounded-tl-none'
+                                }`}>
+                                    {msg.text}
+                                </div>
+                                <span className="text-[9px] font-black text-slate-400 mt-1 uppercase tracking-widest">{msg.time} • {msg.sender}</span>
+                            </div>
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
                 <div ref={messagesEndRef} />
             </div>
 
-            {/* Input */}
-            <form onSubmit={sendMessage} className="p-4 bg-white border-t border-slate-100 flex gap-2">
-                <input
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder="Type a message..."
-                    className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <button
-                    type="submit"
-                    disabled={status !== 'Connected'}
-                    className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white p-2 rounded-lg transition-colors"
-                >
-                    <Send size={18} />
-                </button>
-            </form>
+            {/* Input Form */}
+            <div className="p-4 bg-white dark:bg-[#0B1220] border-t border-slate-100 dark:border-slate-800">
+                <form onSubmit={sendMessage} className="relative group">
+                    <input
+                        type="text"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        placeholder="Ask your health question..."
+                        className="w-full bg-slate-50 dark:bg-[#121A2F] border border-slate-200 dark:border-slate-800 rounded-xl pl-4 pr-14 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:text-white transition-all shadow-inner"
+                    />
+                    <button
+                        type="submit"
+                        disabled={!input.trim() || status !== 'Connected'}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-600 hover:bg-blue-700 disabled:opacity-30 text-white p-2.5 rounded-lg transition-all shadow-lg active:scale-95 flex items-center justify-center"
+                    >
+                        <Send size={18} />
+                    </button>
+                </form>
+                <div className="flex items-center gap-2 mt-3 px-2">
+                    <AlertCircle size={10} className="text-amber-500" />
+                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">AI Assistant guidance should be verified by a professional.</span>
+                </div>
+            </div>
         </div >
     );
 };

@@ -5,8 +5,8 @@ python-jose[cryptography]
 passlib[bcrypt]
 python-multipart
 python-dotenv
-torch>=2.1.0 --index-url https://download.pytorch.org/whl/cpu
-torchvision>=0.16.0 --index-url https://download.pytorch.org/whl/cpu
+# torch>=2.1.0 --index-url https://download.pytorch.org/whl/cpu
+# torchvision>=0.16.0 --index-url https://download.pytorch.org/whl/cpu
 transformers>=4.36.0
 accelerate>=0.25.0
 safetensors
