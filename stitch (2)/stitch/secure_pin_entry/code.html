@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Secure PIN Entry - MedGemma</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4387f4",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101722", // Adjusted for charcoal feel within theme rules
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Manrope', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .pin-slot-glow {
+            box-shadow: 0 0 15px rgba(67, 135, 244, 0.4);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 flex flex-col min-h-screen font-display">
+<!-- Top Navigation Area -->
+<header class="flex items-center justify-between p-6">
+<button class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-2xl">arrow_back_ios_new</span>
+</button>
+<div class="flex-1"></div>
+<div class="w-10"></div> <!-- Spacer for centering -->
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col items-center justify-center px-8 pb-12">
+<!-- Header Section -->
+<div class="text-center mb-10">
+<div class="mb-4 flex justify-center">
+<div class="bg-primary/20 p-3 rounded-full">
+<span class="material-symbols-outlined text-primary text-3xl">medical_services</span>
+</div>
+</div>
+<h1 class="text-2xl font-bold tracking-tight mb-2">Enter PIN to Unlock</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm">MedGemma Secure Access</p>
+</div>
+<!-- PIN Input Display -->
+<div class="flex gap-5 mb-8">
+<!-- Filled State Example -->
+<div class="w-4 h-4 rounded-full bg-primary pin-slot-glow"></div>
+<!-- Empty State Examples -->
+<div class="w-4 h-4 rounded-full border-2 border-slate-300 dark:border-slate-700"></div>
+<div class="w-4 h-4 rounded-full border-2 border-slate-300 dark:border-slate-700"></div>
+<div class="w-4 h-4 rounded-full border-2 border-slate-300 dark:border-slate-700"></div>
+</div>
+<button class="text-primary font-semibold text-sm hover:opacity-80 transition-opacity mb-12">
+            Forgot PIN?
+        </button>
+<!-- Numeric Keypad -->
+<div class="grid grid-cols-3 gap-x-8 gap-y-6 w-full max-w-[320px]">
+<!-- Row 1 -->
+<button class="flex items-center justify-center w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800/50 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition-all">
+<span class="text-2xl font-medium">1</span>
+</button>
+<button class="flex items-center justify-center w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800/50 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition-all">
+<span class="text-2xl font-medium">2</span>
+</button>
+<button class="flex items-center justify-center w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800/50 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition-all">
+<span class="text-2xl font-medium">3</span>
+</button>
+<!-- Row 2 -->
+<button class="flex items-center justify-center w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800/50 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition-all">
+<span class="text-2xl font-medium">4</span>
+</button>
+<button class="flex items-center justify-center w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800/50 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition-all">
+<span class="text-2xl font-medium">5</span>
+</button>
+<button class="flex items-center justify-center w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800/50 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition-all">
+<span class="text-2xl font-medium">6</span>
+</button>
+<!-- Row 3 -->
+<button class="flex items-center justify-center w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800/50 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition-all">
+<span class="text-2xl font-medium">7</span>
+</button>
+<button class="flex items-center justify-center w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800/50 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition-all">
+<span class="text-2xl font-medium">8</span>
+</button>
+<button class="flex items-center justify-center w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800/50 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition-all">
+<span class="text-2xl font-medium">9</span>
+</button>
+<!-- Row 4 -->
+<div class="flex items-center justify-center w-20 h-20"></div> <!-- Empty spacer -->
+<button class="flex items-center justify-center w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800/50 hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition-all">
+<span class="text-2xl font-medium">0</span>
+</button>
+<button class="flex items-center justify-center w-20 h-20 rounded-full bg-transparent hover:bg-slate-200 dark:hover:bg-slate-800/50 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-2xl">backspace</span>
+</button>
+</div>
+</main>
+<!-- Footer Action -->
+<footer class="p-8 flex justify-center">
+<button class="flex items-center gap-3 px-8 py-4 rounded-full bg-primary/10 border border-primary/20 hover:bg-primary/20 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-primary">fingerprint</span>
+<span class="font-bold text-sm tracking-wide text-primary uppercase">Use Biometrics</span>
+</button>
+</footer>
+<!-- iOS Home Indicator Space -->
+<div class="h-8"></div>
+</body></html>

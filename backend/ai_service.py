@@ -10,7 +10,14 @@ from PIL import Image
 import google.generativeai as genai
 import os
 import json
-# import torch  # MOVED TO LAZY
+import requests
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Find .env in project root relative to this file
+env_path = Path(__file__).parent.parent / '.env'
+load_dotenv(dotenv_path=env_path)
+
 from . import ethical_ai_logic as ethical
 
 # Configure Logging
@@ -42,6 +49,32 @@ def configure_genai(api_key: str):
         return
     genai.configure(api_key=api_key)
     logger.info("Google Gemini API configured.")
+
+def _call_remote_engine(endpoint: str, data: dict = None, files: dict = None) -> Optional[dict]:
+    """ Helper to call the remote Kaggle MedGemma engine. """
+    remote_url = os.getenv("AI_SERVICE_URL")
+    if not remote_url or "localhost" in remote_url or "127.0.0.1" in remote_url:
+        print(f"DEBUG: Skipping remote call (Local/Mock mode active). URL: {remote_url}")
+        return None
+    
+    try:
+        url = f"{remote_url.rstrip('/')}/{endpoint.lstrip('/')}"
+        print(f"📡 DEBUG: Sending {endpoint} to Kaggle AI: {url}")
+        
+        headers = {"ngrok-skip-browser-warning": "true"}
+        
+        if files:
+            resp = requests.post(url, data=data, files=files, headers=headers, timeout=60)
+        else:
+            resp = requests.post(url, data=data, headers=headers, timeout=30)
+            
+        if resp.status_code == 200:
+            print(f"DEBUG: Success from remote {endpoint}")
+            return resp.json()
+        print(f"DEBUG: Remote error {resp.status_code}: {resp.text[:100]}")
+    except Exception as e:
+        print(f"DEBUG: Remote connection Exception: {e}")
+    return None
 
 def process_medical_image(file_bytes: bytes, filename: str) -> Image.Image:
     """ Handles DICOM windowing, resizing, and normalization. """
@@ -141,6 +174,16 @@ def analyze_with_gemini(image: Image.Image, prompt: str) -> dict:
     if os.getenv("FORCE_LOCAL_MODEL") == "true":
         return analyze_with_local_model(image, prompt)
 
+    # --- TRY REMOTE KAGGLE ENGINE FIRST ---
+    img_byte_arr = io.BytesIO()
+    image.save(img_byte_arr, format='PNG')
+    files = {'image': ('image.png', img_byte_arr.getvalue(), 'image/png')}
+    remote_res = _call_remote_engine("analyze", data={'prompt': prompt}, files=files)
+    if remote_res:
+        logger.info("Successfully used Remote Kaggle Engine for analysis.")
+        return remote_res
+
+    # --- FALLBACK TO GEMINI ---
     try:
         gemini_model = genai.GenerativeModel('gemini-1.5-flash')
         
@@ -225,6 +268,12 @@ def medical_knowledge_lookup(symptom: str) -> dict:
     Specialized knowledge lookup for symptoms/problems.
     Provides "Why it happens" and "What to do".
     """
+    # Try remote engine first
+    remote_res = _call_remote_engine("symptom_analysis", data={'problem': symptom})
+    if remote_res:
+        logger.info("Successfully used Remote Kaggle Engine for symptom analysis.")
+        return remote_res
+
     try:
         # Priority model: gemini-flash-lite-latest (confirmed working)
         model_id = 'gemini-flash-lite-latest'
@@ -339,6 +388,13 @@ def analyze_with_local_model(image: Image.Image, prompt: str) -> dict:
 def chat_with_ai(message: str, image: Optional[Image.Image] = None) -> str:
     """ Simple chat interface for MedGemma. Fallback to Gemini if local model absent. """
     global model, processor
+    
+    # Try remote engine first for chat
+    remote_res = _call_remote_engine("chat", data={'message': message})
+    if remote_res and "response" in remote_res:
+        logger.info("Successfully used Remote Kaggle Engine for chat response.")
+        return remote_res["response"]
+    
     if not model or not processor:
         try:
             # Prioritized list of models
@@ -400,3 +456,19 @@ def load_models():
     # Check for local model
     if os.getenv("FORCE_LOCAL_MODEL") == "true":
         load_local_model()
+
+def get_ai_engine_status():
+    """ Check if the remote Kaggle engine is reachable. """
+    remote_url = os.getenv("AI_SERVICE_URL")
+    if not remote_url or "localhost" in remote_url or "127.0.0.1" in remote_url:
+        return {"status": "mock", "message": "Local/Mock mode active"}
+        
+    try:
+        url = f"{remote_url.rstrip('/')}/health"
+        print(f"📡 DEBUG: Pinging AI Health at {url}")
+        resp = requests.get(url, headers={"ngrok-skip-browser-warning": "true"}, timeout=5)
+        if resp.status_code == 200:
+            return {"status": "online", "message": "Remote engine active", "remote_info": resp.json()}
+        return {"status": "error", "message": f"Remote engine error {resp.status_code}"}
+    except Exception as e:
+        return {"status": "offline", "message": f"Could not reach remote engine: {str(e)}"}

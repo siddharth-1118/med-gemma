@@ -13,6 +13,7 @@ from . import models, database, auth, ai_service
 
 # Initialize DB
 from dotenv import load_dotenv
+load_dotenv() # Load .env variables
 from contextlib import asynccontextmanager
 
 @asynccontextmanager
@@ -29,6 +30,10 @@ app = FastAPI(title="MedGemma Collaboration Platform", lifespan=lifespan)
 @app.get("/health")
 async def health_check():
     return {"status": "healthy", "service": "MedGemma AI"}
+
+@app.get("/ai_health")
+async def ai_health_check():
+    return ai_service.get_ai_engine_status()
 
 # CORS
 app.add_middleware(

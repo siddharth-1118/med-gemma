@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Past Appointment History - MedGemma</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#187adc",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111921",
+                        "surface-dark": "#1c2126",
+                        "tonal-gray": "#293038",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Manrope', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .ios-blur {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-display">
+<!-- iOS Status Bar Spacer -->
+<div class="h-12 w-full bg-background-light/80 dark:bg-background-dark/80 sticky top-0 z-50 ios-blur">
+<div class="flex justify-between items-center px-6 h-full">
+<span class="text-sm font-bold">9:41</span>
+<div class="flex gap-1.5 items-center">
+<span class="material-symbols-outlined text-sm">signal_cellular_4_bar</span>
+<span class="material-symbols-outlined text-sm">wifi</span>
+<span class="material-symbols-outlined text-sm">battery_full</span>
+</div>
+</div>
+</div>
+<!-- Header & Search Section -->
+<header class="px-4 pt-2 pb-4 bg-background-light/80 dark:bg-background-dark/80 sticky top-12 z-40 ios-blur border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center justify-between mb-4">
+<h1 class="text-2xl font-extrabold tracking-tight">Past Appointments</h1>
+<span class="bg-primary/20 text-primary text-xs font-bold px-2 py-1 rounded-full">24 Records</span>
+</div>
+<!-- MD3 Search Bar -->
+<div class="relative flex items-center mb-4">
+<span class="material-symbols-outlined absolute left-3 text-slate-500">search</span>
+<input class="w-full bg-slate-200 dark:bg-tonal-gray border-none rounded-xl py-3 pl-11 pr-4 text-sm focus:ring-2 focus:ring-primary outline-none" placeholder="Search by specialist or diagnosis" type="text"/>
+</div>
+<!-- Filter Chips -->
+<div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+<button class="flex items-center gap-1.5 bg-primary text-white px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap">
+                All Specialties
+            </button>
+<button class="flex items-center gap-1.5 bg-slate-200 dark:bg-tonal-gray text-slate-700 dark:text-slate-300 px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border border-transparent hover:border-primary/50">
+                Cardiology
+            </button>
+<button class="flex items-center gap-1.5 bg-slate-200 dark:bg-tonal-gray text-slate-700 dark:text-slate-300 px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border border-transparent hover:border-primary/50">
+                Neurology
+            </button>
+<button class="flex items-center gap-1.5 bg-slate-200 dark:bg-tonal-gray text-slate-700 dark:text-slate-300 px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border border-transparent hover:border-primary/50">
+                Dermatology
+            </button>
+</div>
+</header>
+<!-- Main Content: History Cards -->
+<main class="flex-1 px-4 py-6 space-y-4 overflow-y-auto">
+<!-- Month Divider -->
+<h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest px-1">October 2023</h3>
+<!-- Card 1 -->
+<div class="bg-white dark:bg-surface-dark rounded-xl p-4 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col gap-3">
+<div class="flex justify-between items-start">
+<div class="flex gap-3">
+<div class="size-12 rounded-lg bg-cover bg-center" data-alt="Portrait of a male doctor in a lab coat" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCjmGvdQK5OAODUq8Tzu7WSIjPcrTQxJ6E3csKVS5Y-Z2lDe06-ADJ62BEqgWkMWt3tLDPRt9X_1w6hwHHSEKC25IlKqd0Kb2mSf54tXqWB3tFyFNrRmEo42VfAFycSX4l9Sv_1RqOwIAeyXzR6qWe224k6aQxKxsZXcR8tkdjHjK1mcw2Egi2Su3ztjx5seAevkEg4AhVTdRY8q7VUgk7j7OJADNQ0GvR0VeIG-V5bJVW-H3gkLoJfGJ3BWskRGXu75ce9gzfERp4')"></div>
+<div>
+<h4 class="font-bold text-base">Dr. Aris Thorne</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400">Cardiologist • Oct 24, 2023</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-xl">verified</span>
+</div>
+<div class="bg-slate-50 dark:bg-tonal-gray/40 rounded-lg p-3">
+<p class="text-xs font-bold text-primary uppercase tracking-tighter mb-1">Diagnostic Summary</p>
+<p class="text-sm leading-relaxed text-slate-700 dark:text-slate-300 italic">
+                    "Mild hypertension noted. Patient exhibits early signs of stress-induced cardiac strain. Recommended lifestyle adjustments and follow-up in 6 months."
+                </p>
+</div>
+<div class="flex items-center justify-between mt-1 pt-2 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-sm">signature</span>
+<span class="text-[10px] text-slate-500 font-medium">Electronically Signed: A. Thorne, MD</span>
+</div>
+<button class="text-primary text-sm font-bold flex items-center gap-1 hover:opacity-80">
+                    View Full Report
+                    <span class="material-symbols-outlined text-sm">arrow_forward_ios</span>
+</button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white dark:bg-surface-dark rounded-xl p-4 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col gap-3 opacity-90">
+<div class="flex justify-between items-start">
+<div class="flex gap-3">
+<div class="size-12 rounded-lg bg-cover bg-center" data-alt="Female medical professional profile picture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBWcLYjsJle046CC2Qc3LyVhM8EIimxCGE_u1rlIXVcWKLX0xkuzY_Sl6g3kZmSqLxpthFQiGA-Wp4sPHfFTboWu-UkKwWzh_A4L86pxI1EtmHvtC3uK5R4UWqJJhTkPxBZTFTbs4iqQXCt6bTzSnJOT2av1-zh5OZB273JgWv1ajq1EZFh84vRP9p_TbYTzpEeDq-2XIV2grNPViUmppi1DC0thy8yPvYOKUZ-0RG4KQ7t6FpMkm07X1nikU9psGxYRLjVObkAngU')"></div>
+<div>
+<h4 class="font-bold text-base">Dr. Sarah Jenkins</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400">Neurology • Oct 12, 2023</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-xl">verified</span>
+</div>
+<div class="bg-slate-50 dark:bg-tonal-gray/40 rounded-lg p-3">
+<p class="text-xs font-bold text-primary uppercase tracking-tighter mb-1">Diagnostic Summary</p>
+<p class="text-sm leading-relaxed text-slate-700 dark:text-slate-300 italic">
+                    "Tension-type headache. Clear MRI. Prescribed magnesium supplements (400mg) and stress management techniques. Monitor frequency of episodes."
+                </p>
+</div>
+<div class="flex items-center justify-between mt-1 pt-2 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-sm">signature</span>
+<span class="text-[10px] text-slate-500 font-medium">Electronically Signed: S. Jenkins, PhD</span>
+</div>
+<button class="text-primary text-sm font-bold flex items-center gap-1 hover:opacity-80">
+                    View Full Report
+                    <span class="material-symbols-outlined text-sm">arrow_forward_ios</span>
+</button>
+</div>
+</div>
+<!-- Month Divider -->
+<h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest px-1 pt-4">September 2023</h3>
+<!-- Card 3 -->
+<div class="bg-white dark:bg-surface-dark rounded-xl p-4 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col gap-3">
+<div class="flex justify-between items-start">
+<div class="flex gap-3">
+<div class="size-12 rounded-lg bg-cover bg-center" data-alt="Male surgeon in blue scrubs" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB0lws_hYOiqRRZmoDoFoBd6G2BaJvdl72TwFKdCes1RWFNJm5xZE83BLIeeI47PiBxD27Fzqe3QFuvJKiEAuz7_4_nz5qdfCyik6BfZFRnYRmH408bu66lOZjBi9xZydIu_KoPZoiE8dT1CpusMc3_tmZlrU5DDUjWWuS981Dv5q_FaKHtgR1it-w46ZKHcT1jSsHXM55wi17uN5Pjj-K62OAWVwxrmUok30Ra9oMzAqQULrIXZzo3dv9WqGLqCLcbtXrT9hc177M')"></div>
+<div>
+<h4 class="font-bold text-base">Dr. Julian Vance</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400">Orthopedic • Sep 28, 2023</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-xl">verified</span>
+</div>
+<div class="bg-slate-50 dark:bg-tonal-gray/40 rounded-lg p-3">
+<p class="text-xs font-bold text-primary uppercase tracking-tighter mb-1">Diagnostic Summary</p>
+<p class="text-sm leading-relaxed text-slate-700 dark:text-slate-300 italic">
+                    "Post-surgical follow-up. Knee ligament healing at 85%. Physical therapy sessions can be reduced to once per week. Full impact sports prohibited for 30 days."
+                </p>
+</div>
+<div class="flex items-center justify-between mt-1 pt-2 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-sm">signature</span>
+<span class="text-[10px] text-slate-500 font-medium">Electronically Signed: J. Vance, MD</span>
+</div>
+<button class="text-primary text-sm font-bold flex items-center gap-1 hover:opacity-80">
+                    View Full Report
+                    <span class="material-symbols-outlined text-sm">arrow_forward_ios</span>
+</button>
+</div>
+</div>
+<!-- Footer Spacer for Nav -->
+<div class="h-24"></div>
+</main>
+<!-- Floating Action Button (Optional MD3 element) -->
+<button class="fixed bottom-24 right-6 size-14 bg-primary text-white rounded-2xl shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">download</span>
+</button>
+<!-- iOS style Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full bg-background-light/95 dark:bg-background-dark/95 ios-blur border-t border-slate-200 dark:border-slate-800 px-6 pb-8 pt-3">
+<div class="flex justify-between items-center max-w-md mx-auto">
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Upcoming</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">history</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">History</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>

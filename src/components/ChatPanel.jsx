@@ -68,36 +68,38 @@ const ChatPanel = () => {
     };
 
     return (
-        <div className="flex flex-col h-full bg-white dark:bg-[#0B1220] overflow-hidden">
+        <div className="flex flex-col h-full bg-[#0B1220] overflow-hidden transition-all duration-300">
             {/* Header */}
-            <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-[#121A2F]/50 flex justify-between items-center backdrop-blur-md">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800">
-                        <Bot size={22} className="animate-pulse" />
+            <div className="px-6 py-5 border-b border-white/5 bg-background-dark/40 flex justify-between items-center backdrop-blur-xl">
+                <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary border border-primary/30 shadow-glow-blue">
+                        <Bot size={20} className="animate-pulse-slow" />
                     </div>
                     <div>
-                        <h3 className="font-bold text-slate-800 dark:text-white flex items-center gap-1.5 text-sm uppercase tracking-wider">
-                            AI Health Assistant <Activity size={14} className="text-amber-400" />
+                        <h3 className="font-black text-white flex items-center gap-2 text-[10px] uppercase tracking-[0.2em]">
+                            Intelligence Consult <Activity size={12} className="text-accent-teal" />
                         </h3>
-                        <div className="flex items-center gap-1.5">
-                            <div className={`w-1.5 h-1.5 rounded-full ${status === 'Connected' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]' : 'bg-red-500'}`}></div>
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{status === 'Connected' ? 'Online & Ready' : 'Connecting...'}</span>
+                        <div className="flex items-center gap-2 mt-0.5">
+                            <div className={`w-1.5 h-1.5 rounded-full ${status === 'Connected' ? 'bg-accent-teal shadow-glow-teal' : 'bg-red-500'}`}></div>
+                            <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">{status === 'Connected' ? 'Engine Active' : 'Connecting Engine...'}</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* Messages Scroll Area */}
-            <div className="flex-1 overflow-y-auto p-5 space-y-6 bg-slate-50/30 dark:bg-[#05090E]/30 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto p-6 space-y-8 bg-[#05090E]/40 custom-scrollbar">
                 {messages.length === 0 && (
-                    <div className="h-full flex flex-col items-center justify-center text-center px-10">
-                        <div className="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4 text-slate-400 opacity-20">
+                    <div className="h-full flex flex-col items-center justify-center text-center px-10 space-y-4">
+                        <div className="w-20 h-20 rounded-3xl bg-white/5 flex items-center justify-center text-slate-700 border border-white/10">
                             <MessageSquare size={32} />
                         </div>
-                        <h4 className="text-slate-700 dark:text-slate-300 font-bold mb-2">How can I help you today?</h4>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 max-w-[200px] leading-relaxed">
-                            Ask me about your medical scan or any symptoms you're experiencing.
-                        </p>
+                        <div className="space-y-1">
+                          <h4 className="text-white font-black text-[10px] uppercase tracking-widest">Consult Loop Ready</h4>
+                          <p className="text-[10px] text-slate-500 max-w-[200px] leading-relaxed uppercase tracking-tighter">
+                              Ask about findings, differentials, or suggested follow-ups for this patient.
+                          </p>
+                        </div>
                     </div>
                 )}
                 
@@ -105,23 +107,23 @@ const ChatPanel = () => {
                     {messages.map((msg, idx) => (
                         <motion.div 
                             key={idx}
-                            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                            initial={{ opacity: 0, y: 15, scale: 0.98 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
-                            className={`flex gap-3 ${msg.sender === 'You' ? 'flex-row-reverse' : 'flex-row'}`}
+                            className={`flex gap-4 ${msg.sender === 'You' ? 'flex-row-reverse' : 'flex-row'}`}
                         >
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border-2 border-white dark:border-slate-800 shadow-sm ${msg.sender === 'You' ? 'bg-[#1F4FD8] text-white' : 'bg-[#2EC4B6] text-white'}`}>
+                            <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border border-white/10 shadow-lg ${msg.sender === 'You' ? 'bg-primary text-white shadow-glow-blue' : 'bg-background-dark text-slate-400'}`}>
                                 {msg.sender === 'You' ? <User size={14} /> : <Bot size={14} />}
                             </div>
                             
-                            <div className={`flex flex-col max-w-[80%] ${msg.sender === 'You' ? 'items-end' : 'items-start'}`}>
-                                <div className={`p-4 rounded-2xl shadow-sm text-sm leading-relaxed ${
+                            <div className={`flex flex-col max-w-[85%] ${msg.sender === 'You' ? 'items-end' : 'items-start'}`}>
+                                <div className={`p-5 rounded-2xl shadow-2xl text-xs leading-relaxed font-medium ${
                                     msg.sender === 'You' 
-                                    ? 'bg-[#1F4FD8] text-white rounded-tr-none' 
-                                    : 'bg-white dark:bg-[#121A2F] text-slate-700 dark:text-slate-200 border border-slate-100 dark:border-slate-800 rounded-tl-none'
+                                    ? 'bg-primary text-white rounded-tr-none' 
+                                    : 'bg-white/5 text-slate-200 border border-white/10 rounded-tl-none backdrop-blur-md'
                                 }`}>
                                     {msg.text}
                                 </div>
-                                <span className="text-[9px] font-black text-slate-400 mt-1 uppercase tracking-widest">{msg.time} • {msg.sender}</span>
+                                <span className="text-[8px] font-black text-slate-500 mt-2 uppercase tracking-widest">{msg.time} • {msg.sender}</span>
                             </div>
                         </motion.div>
                     ))}
@@ -130,29 +132,29 @@ const ChatPanel = () => {
             </div>
 
             {/* Input Form */}
-            <div className="p-4 bg-white dark:bg-[#0B1220] border-t border-slate-100 dark:border-slate-800">
+            <div className="p-4 bg-background-dark/80 border-t border-white/5 backdrop-blur-md">
                 <form onSubmit={sendMessage} className="relative group">
                     <input
                         type="text"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        placeholder="Ask your health question..."
-                        className="w-full bg-slate-50 dark:bg-[#121A2F] border border-slate-200 dark:border-slate-800 rounded-xl pl-4 pr-14 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:text-white transition-all shadow-inner"
+                        placeholder="Inquire about clinical findings..."
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl pl-5 pr-14 py-4 text-xs font-bold text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all placeholder:text-slate-700"
                     />
                     <button
                         type="submit"
                         disabled={!input.trim() || status !== 'Connected'}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-600 hover:bg-blue-700 disabled:opacity-30 text-white p-2.5 rounded-lg transition-all shadow-lg active:scale-95 flex items-center justify-center"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary hover:scale-105 disabled:opacity-30 text-white w-10 h-10 rounded-xl transition-all shadow-glow-blue active:scale-95 flex items-center justify-center"
                     >
-                        <Send size={18} />
+                        <Send size={16} />
                     </button>
                 </form>
-                <div className="flex items-center gap-2 mt-3 px-2">
-                    <AlertCircle size={10} className="text-amber-500" />
-                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">AI Assistant guidance should be verified by a professional.</span>
+                <div className="flex items-center gap-2 mt-4 px-2 opacity-50">
+                    <AlertCircle size={10} className="text-accent-teal" />
+                    <span className="text-[8px] font-black text-slate-500 uppercase tracking-tighter italic">Engine inference requires clinical validation.</span>
                 </div>
             </div>
-        </div >
+        </div>
     );
 };
 

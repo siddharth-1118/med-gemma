@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Doctor Profile Details View - MedGemma</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2ec2b3",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#131f1e",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .glass {
+            background: rgba(46, 194, 179, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(46, 194, 179, 0.2);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header / Navigation -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10 px-4 py-3 flex items-center justify-between">
+<button class="p-2 hover:bg-primary/10 rounded-full transition-colors">
+<span class="material-symbols-outlined text-primary">arrow_back_ios_new</span>
+</button>
+<h1 class="text-sm font-semibold tracking-wide uppercase text-primary/80">Specialist Details</h1>
+<button class="p-2 hover:bg-primary/10 rounded-full transition-colors">
+<span class="material-symbols-outlined text-primary">share</span>
+</button>
+</header>
+<main class="flex-1 overflow-y-auto pb-32">
+<!-- Profile Hero Section -->
+<section class="flex flex-col items-center pt-8 pb-6 px-4">
+<div class="relative mb-4">
+<div class="size-32 rounded-full border-4 border-primary/20 p-1">
+<div class="size-full rounded-full bg-cover bg-center" data-alt="Professional headshot of a female clinical oncologist" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAUOPJNYcy_FvCOlkNmRGSVRSnnJjlfRkWX7ekc8hKr6uTe6lJ3mzkdq6WTHlwrzGhtXGgLJi4yCDD-pfx13sRhCD1fXfg5iuwK0HfyJELQVtTltG0gSr-9P4aciCekpR_ewogzoneqf3_5q1_VExcWHDQ6BHUPiyw983gRxGbN3y6xQNcd50Dvoo4ijJvqJaXnzeURrGRmdUUhALu8x1zr-jmi0JIJWAlp-8eGgP-QZBopxFJTjGaCIYd8bKx6hdDtO2r0lwRS5AI')">
+</div>
+</div>
+<div class="absolute bottom-1 right-1 bg-primary text-background-dark px-2 py-0.5 rounded-full flex items-center gap-1 shadow-lg border-2 border-background-dark">
+<span class="material-symbols-outlined text-[14px] font-bold">verified</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Verified</span>
+</div>
+</div>
+<h2 class="text-2xl font-bold dark:text-white">Dr. Samantha Vance</h2>
+<p class="text-primary font-medium">Senior Clinical Oncologist</p>
+<div class="flex items-center gap-2 mt-2 opacity-70">
+<span class="material-symbols-outlined text-sm">location_on</span>
+<span class="text-xs uppercase tracking-widest">Palo Alto, California</span>
+</div>
+</section>
+<!-- Biography Section -->
+<section class="px-6 mb-8">
+<h3 class="text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">Biography</h3>
+<div class="bg-primary/5 border border-primary/10 rounded-xl p-4 leading-relaxed text-sm text-slate-700 dark:text-slate-300">
+                Expert in multimodal AI-assisted diagnostics and personalized treatment planning with over 12 years of clinical experience in complex oncology cases. Specialized in integrating genomic data with real-time clinical analysis.
+            </div>
+</section>
+<!-- Education & Research Timeline -->
+<section class="px-6 mb-8">
+<h3 class="text-xs font-bold uppercase tracking-[0.2em] text-primary mb-4">Education &amp; Research</h3>
+<div class="space-y-6 relative before:content-[''] before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-primary/20">
+<!-- Timeline Item 1 -->
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 size-[24px] rounded-full bg-primary flex items-center justify-center border-4 border-background-dark">
+<span class="material-symbols-outlined text-[12px] text-white font-bold">school</span>
+</div>
+<div>
+<h4 class="text-sm font-bold">Clinical Fellowship</h4>
+<p class="text-xs text-primary font-medium">Johns Hopkins University</p>
+<p class="text-[11px] opacity-60 mt-1">Advanced Molecular Oncology &amp; AI Integration • 2018 — 2021</p>
+</div>
+</div>
+<!-- Timeline Item 2 -->
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 size-[24px] rounded-full bg-primary/40 flex items-center justify-center border-4 border-background-dark">
+<span class="material-symbols-outlined text-[12px] text-white">history_edu</span>
+</div>
+<div>
+<h4 class="text-sm font-bold">Doctor of Medicine (MD)</h4>
+<p class="text-xs text-primary font-medium">Stanford University School of Medicine</p>
+<p class="text-[11px] opacity-60 mt-1">Honors in Clinical Research • 2014 — 2018</p>
+</div>
+</div>
+<!-- Timeline Item 3 -->
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 size-[24px] rounded-full bg-primary/20 flex items-center justify-center border-4 border-background-dark">
+<span class="material-symbols-outlined text-[12px] text-white/50">science</span>
+</div>
+<div>
+<h4 class="text-sm font-bold">B.S. Biomedical Engineering</h4>
+<p class="text-xs text-primary font-medium">MIT</p>
+<p class="text-[11px] opacity-60 mt-1">Summa Cum Laude • 2010 — 2014</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Patient Reviews -->
+<section class="mb-8">
+<div class="px-6 flex items-center justify-between mb-4">
+<h3 class="text-xs font-bold uppercase tracking-[0.2em] text-primary">Patient Reviews</h3>
+<div class="flex items-center gap-1">
+<span class="text-xs font-bold text-amber-500">4.9</span>
+<span class="material-symbols-outlined text-xs text-amber-500">star</span>
+</div>
+</div>
+<div class="flex gap-4 overflow-x-auto px-6 pb-4 hide-scrollbar">
+<!-- Review Card 1 -->
+<div class="glass min-w-[260px] p-4 rounded-xl flex flex-col justify-between">
+<div>
+<div class="flex gap-0.5 mb-2">
+<span class="material-symbols-outlined text-[14px] text-amber-500">star</span>
+<span class="material-symbols-outlined text-[14px] text-amber-500">star</span>
+<span class="material-symbols-outlined text-[14px] text-amber-500">star</span>
+<span class="material-symbols-outlined text-[14px] text-amber-500">star</span>
+<span class="material-symbols-outlined text-[14px] text-amber-500">star</span>
+</div>
+<p class="text-xs italic leading-relaxed opacity-90">"Dr. Vance provided clarity during a very difficult diagnosis. Her use of MedGemma AI helped us understand the specific genetic markers."</p>
+</div>
+<div class="mt-4 flex items-center gap-2">
+<div class="size-6 rounded-full bg-primary/20 flex items-center justify-center text-[10px] font-bold">AM</div>
+<span class="text-[10px] uppercase font-semibold tracking-wider opacity-60">Patient A.M.</span>
+</div>
+</div>
+<!-- Review Card 2 -->
+<div class="glass min-w-[260px] p-4 rounded-xl flex flex-col justify-between">
+<div>
+<div class="flex gap-0.5 mb-2">
+<span class="material-symbols-outlined text-[14px] text-amber-500">star</span>
+<span class="material-symbols-outlined text-[14px] text-amber-500">star</span>
+<span class="material-symbols-outlined text-[14px] text-amber-500">star</span>
+<span class="material-symbols-outlined text-[14px] text-amber-500">star</span>
+<span class="material-symbols-outlined text-[14px] text-amber-500">star</span>
+</div>
+<p class="text-xs italic leading-relaxed opacity-90">"Extremely professional and forward-thinking. She really takes the time to explain the clinical analysis reports."</p>
+</div>
+<div class="mt-4 flex items-center gap-2">
+<div class="size-6 rounded-full bg-primary/20 flex items-center justify-center text-[10px] font-bold">LK</div>
+<span class="text-[10px] uppercase font-semibold tracking-wider opacity-60">Patient L.K.</span>
+</div>
+</div>
+<!-- Review Card 3 -->
+<div class="glass min-w-[260px] p-4 rounded-xl flex flex-col justify-between opacity-50">
+<div class="flex items-center justify-center h-full">
+<p class="text-xs font-semibold">View All 124 Reviews</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Fixed Footer Actions -->
+<footer class="fixed bottom-0 left-0 right-0 bg-background-light dark:bg-background-dark border-t border-primary/10 p-4 pb-8 flex gap-3 shadow-[0_-10px_30px_rgba(0,0,0,0.3)]">
+<button class="flex-1 h-12 rounded-xl border-2 border-primary text-primary font-bold text-sm hover:bg-primary/5 active:scale-95 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">chat_bubble</span>
+            Message Specialist
+        </button>
+<button class="flex-[1.2] h-12 rounded-xl bg-primary text-background-dark font-bold text-sm shadow-lg shadow-primary/20 active:scale-95 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+            Book Appointment
+        </button>
+</footer>
+<!-- Bottom Nav (Small spacing for mobile layout) -->
+<div class="fixed bottom-0 w-full h-1 bg-primary/20"></div>
+</body></html>

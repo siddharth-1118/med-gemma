@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Patient Intake &amp; Upload - MedGemma</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1fa5d6",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#0B1220",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .upload-dashed {
+            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='48' ry='48' stroke='%231fa5d6' stroke-width='2' stroke-dasharray='8%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+            border-radius: 3rem;
+        }
+        .pulse-glow {
+            box-shadow: 0 0 0 0 rgba(31, 165, 214, 0.7);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(31, 165, 214, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(31, 165, 214, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(31, 165, 214, 0); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header -->
+<header class="sticky top-0 z-50 px-6 py-4 flex items-center justify-between glass-card border-b-0 rounded-none">
+<button class="flex items-center justify-center size-10 rounded-full bg-slate-800/50 text-slate-100">
+<span class="material-symbols-outlined">arrow_back_ios_new</span>
+</button>
+<h1 class="text-lg font-semibold tracking-tight">Patient Intake</h1>
+<button class="flex items-center justify-center size-10 rounded-full bg-slate-800/50 text-slate-100">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</header>
+<main class="flex-1 overflow-y-auto px-6 pt-6 pb-32 space-y-8">
+<!-- Upload Section -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h2 class="text-sm font-medium text-slate-400 uppercase tracking-wider">Medical Imaging</h2>
+<span class="text-xs text-primary bg-primary/10 px-2 py-1 rounded-full">Multimodal AI Active</span>
+</div>
+<div class="upload-dashed p-8 flex flex-col items-center justify-center text-center space-y-4 bg-primary/5 group cursor-pointer active:scale-95 transition-transform">
+<div class="size-16 rounded-full bg-primary/20 flex items-center justify-center text-primary mb-2">
+<span class="material-symbols-outlined text-4xl">cloud_upload</span>
+</div>
+<div>
+<p class="text-lg font-semibold">Upload X-rays &amp; Scans</p>
+<p class="text-xs text-slate-400 mt-1">DICOM, JPG, or PNG (Max 50MB)</p>
+</div>
+<button class="mt-2 bg-primary text-white font-bold py-2 px-6 rounded-full text-sm">
+                    Select Files
+                </button>
+</div>
+</section>
+<!-- Patient Info Section -->
+<section class="space-y-4">
+<h2 class="text-sm font-medium text-slate-400 uppercase tracking-wider">Patient Information</h2>
+<div class="glass-card rounded-xl p-6 space-y-6">
+<!-- Age & Sex Row -->
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="text-xs font-semibold text-slate-400 ml-1">Age</label>
+<input class="w-full bg-slate-800/50 border-slate-700 rounded-xl focus:ring-primary focus:border-primary text-slate-100 placeholder:text-slate-600" placeholder="e.g. 45" type="number"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-semibold text-slate-400 ml-1">Sex</label>
+<select class="w-full bg-slate-800/50 border-slate-700 rounded-xl focus:ring-primary focus:border-primary text-slate-100">
+<option>Male</option>
+<option>Female</option>
+<option>Other</option>
+</select>
+</div>
+</div>
+<!-- Chief Complaint -->
+<div class="space-y-2">
+<label class="text-xs font-semibold text-slate-400 ml-1">Chief Complaint</label>
+<input class="w-full bg-slate-800/50 border-slate-700 rounded-xl focus:ring-primary focus:border-primary text-slate-100 placeholder:text-slate-600" placeholder="Reason for visit..." type="text"/>
+</div>
+<!-- Medical History -->
+<div class="space-y-2">
+<label class="text-xs font-semibold text-slate-400 ml-1">Medical History</label>
+<textarea class="w-full bg-slate-800/50 border-slate-700 rounded-xl focus:ring-primary focus:border-primary text-slate-100 placeholder:text-slate-600" placeholder="Prior conditions, allergies, current medications..." rows="4"></textarea>
+</div>
+</div>
+</section>
+<!-- AI Insights Preview Card -->
+<div class="glass-card rounded-xl p-4 border-primary/20 bg-primary/5 flex items-start gap-4">
+<div class="text-primary mt-1">
+<span class="material-symbols-outlined">info</span>
+</div>
+<p class="text-xs text-slate-300 leading-relaxed">
+<span class="font-bold text-primary">Pro Tip:</span> Detailed history allows MedGemma to correlate imaging findings with clinical presentation for more accurate differential diagnosis.
+            </p>
+</div>
+</main>
+<!-- Bottom Navigation & Action -->
+<footer class="fixed bottom-0 left-0 right-0 z-50">
+<div class="px-6 py-4 glass-card border-t-0 rounded-none bg-background-dark/80">
+<button class="w-full py-4 bg-primary text-white font-bold rounded-full flex items-center justify-center gap-2 pulse-glow active:scale-95 transition-transform">
+<span class="material-symbols-outlined">analytics</span>
+<span>Continue to Analysis</span>
+</button>
+</div>
+<!-- iOS Style Bottom Bar -->
+<nav class="flex justify-around items-center px-4 pb-6 pt-2 bg-slate-900 border-t border-slate-800">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">add_circle</span>
+<span class="text-[10px] font-medium">Intake</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-[10px] font-medium">Patients</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="text-[10px] font-medium">Insights</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-medium">Settings</span>
+</a>
+</nav>
+</footer>
+</body></html>

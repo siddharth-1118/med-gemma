@@ -13,52 +13,43 @@ export default {
                 serif: ['Merriweather', 'serif'],
             },
             colors: {
-                // Medical Brand Colors
+                "primary": "#1fa5d6",
+                "background-light": "#f6f7f8",
+                "background-dark": "#0B1220",
+                "accent-orange": "#ff8c00",
+                // Legacy support if needed
                 brand: {
-                    primary: '#1F4FD8',   // Clinical Authority
-                    secondary: '#4F8CFF', // Interactive
-                    accent: '#2EC4B6',    // Success / Highlights
-                    warning: '#FF9F1C',   // Attention / ROI
-                },
-                // Semantic Tokens (Light/Dark adaptive)
-                medical: {
-                    bg: {
-                        light: '#F4F7FB',
-                        dark: '#0B1220', // Deep Radiology Blue
-                    },
-                    card: {
-                        light: '#FFFFFF',
-                        dark: '#121A2F', // Card Dark
-                    },
-                    text: {
-                        primary: {
-                            light: '#1F2937',
-                            dark: '#E5E7EB', // High contrast for dark mode
-                        },
-                        secondary: {
-                            light: '#6B7280',
-                            dark: '#9CA3AF',
-                        }
-                    },
-                    border: {
-                        light: '#E5E7EB',
-                        dark: '#1F2937',
-                    }
+                    primary: '#1fa5d6',
+                    accent: '#2EC4B6',
+                    warning: '#ff8c00',
                 }
+            },
+            borderRadius: {
+                "DEFAULT": "1rem",
+                "lg": "2rem",
+                "xl": "3rem",
+                "full": "9999px"
             },
             boxShadow: {
                 'glass': '0 4px 30px rgba(0, 0, 0, 0.1)',
-                'glow-blue': '0 0 20px rgba(31, 79, 216, 0.3)',
-                'glow-orange': '0 0 20px rgba(255, 159, 28, 0.4)',
+                'glow-blue': '0 0 20px rgba(31, 165, 214, 0.3)',
+                'glow-orange': '0 0 20px rgba(255, 140, 0, 0.4)',
+                'ai-glow': '0 0 15px rgba(255, 140, 0, 0.4)',
             },
             animation: {
-                'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                 'float': 'float 3s ease-in-out infinite',
+                'scanning': 'scanning 2s linear infinite',
             },
             keyframes: {
                 float: {
                     '0%, 100%': { transform: 'translateY(0)' },
                     '50%': { transform: 'translateY(-5px)' },
+                },
+                scanning: {
+                    '0%': { top: '0%', opacity: '0' },
+                    '50%': { opacity: '1' },
+                    '100%': { top: '100%', opacity: '0' }
                 }
             }
         },

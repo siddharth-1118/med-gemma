@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Appointments - MedGemma</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2b5fee",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0B1220",
+                        "accent-teal": "#2EC4B6",
+                        "accent-orange": "#FF9F1C",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .ios-blur {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(11, 18, 32, 0.8);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen pb-24">
+<!-- Header Section -->
+<header class="sticky top-0 z-50 ios-blur px-6 pt-12 pb-4">
+<div class="flex items-center justify-between mb-6">
+<button class="flex items-center justify-center size-10 rounded-full bg-slate-200/50 dark:bg-slate-800/50">
+<span class="material-symbols-outlined text-2xl">chevron_left</span>
+</button>
+<h1 class="text-xl font-bold tracking-tight">My Appointments</h1>
+<button class="flex items-center justify-center size-10 rounded-full bg-slate-200/50 dark:bg-slate-800/50 relative">
+<span class="material-symbols-outlined text-2xl">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full"></span>
+</button>
+</div>
+<!-- Segmented Control Toggle -->
+<div class="flex p-1 bg-slate-200/50 dark:bg-slate-800/50 rounded-full w-full max-w-md mx-auto">
+<label class="flex-1 cursor-pointer">
+<input checked="" class="hidden peer" name="view" type="radio"/>
+<div class="py-2.5 text-center rounded-full transition-all peer-checked:bg-primary peer-checked:text-white text-slate-500 dark:text-slate-400 font-semibold text-sm">
+                    Upcoming
+                </div>
+</label>
+<label class="flex-1 cursor-pointer">
+<input class="hidden peer" name="view" type="radio"/>
+<div class="py-2.5 text-center rounded-full transition-all peer-checked:bg-primary peer-checked:text-white text-slate-500 dark:text-slate-400 font-semibold text-sm">
+                    Past
+                </div>
+</label>
+</div>
+</header>
+<!-- Appointment List Container -->
+<main class="px-6 py-6 space-y-6 max-w-2xl mx-auto">
+<!-- Card 1: Confirmed -->
+<div class="glass-card rounded-xl overflow-hidden p-5 flex flex-col gap-5">
+<div class="flex justify-between items-start">
+<div class="flex gap-4">
+<div class="size-14 rounded-full overflow-hidden ring-2 ring-primary/20">
+<img alt="Doctor Avatar" class="w-full h-full object-cover" data-alt="Portrait of a female medical doctor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAO6Kiu8HAFW4FaFE5820u9JIjcrvt77mLuvA9XCrEHJES8qWJG3euUz51V6PXKW0gO2dvOWp16L-MS1mPZs4gdYC4stP_6QsMItA4w4i9ASBGgEh6RC6qiVT8m8-23rDj9VjX-iAO4fY4YZni8Pwe8MSceV_XjfQXVIdbmhXi3P6lsggQNBV0DTS4BPBK1synXR1JqLBSWjseUEcTNo0CVaNmHYW2HjWciw3R4MZUKaAZkQ1M4wZeEhaXlK326iGnPTKE4ywnzVKQ"/>
+</div>
+<div>
+<h3 class="text-lg font-bold">Dr. Sarah Jenkins</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Pulmonology Specialist</p>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-accent-teal/10 text-accent-teal border border-accent-teal/20">
+                    Confirmed
+                </span>
+</div>
+<div class="grid grid-cols-2 gap-4 py-4 border-y border-white/5">
+<div class="flex items-center gap-3">
+<div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-xl">calendar_today</span>
+</div>
+<div>
+<p class="text-[10px] uppercase text-slate-500 font-bold">Date</p>
+<p class="text-sm font-semibold">Oct 24, 2023</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-xl">schedule</span>
+</div>
+<div>
+<p class="text-[10px] uppercase text-slate-500 font-bold">Time</p>
+<p class="text-sm font-semibold">10:30 AM</p>
+</div>
+</div>
+</div>
+<div class="flex gap-3 pt-1">
+<button class="flex-1 py-3 px-4 rounded-full border border-slate-700 text-sm font-bold hover:bg-white/5 transition-colors">
+                    Reschedule
+                </button>
+<button class="flex-1 py-3 px-4 rounded-full bg-primary text-white text-sm font-bold shadow-lg shadow-primary/20 hover:brightness-110 transition-all">
+                    View Results
+                </button>
+</div>
+</div>
+<!-- Card 2: Pending -->
+<div class="glass-card rounded-xl overflow-hidden p-5 flex flex-col gap-5 opacity-90">
+<div class="flex justify-between items-start">
+<div class="flex gap-4">
+<div class="size-14 rounded-full overflow-hidden ring-2 ring-primary/20">
+<img alt="Doctor Avatar" class="w-full h-full object-cover" data-alt="Portrait of a male medical doctor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDObuS1Bs3WoO0ILr7TMaullSGlTNhTnjYjJDUHqKuidrwEhsCDCWU60ZFWOpG_Gzqp1E9ugIg1qqVqEOAnjQORcPdaoZ_6ddghb_oYUUOBHEuSxGl-E90WrAGND5GUeUxohz1N6fzZ9WoiTtImlZut2V6_qy9tGRS9xYZvllEag3yB67cb4IQDxqn5rf8SFW0-tmEecibVF7hX3zWYDBwsTYkay90tgu1wZest1G9sVfzGKX4jFCfLZPSUUrv9tjBLcRZ8oNpDCYM"/>
+</div>
+<div>
+<h3 class="text-lg font-bold">Dr. Marcus Chen</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Cardiology Department</p>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-accent-orange/10 text-accent-orange border border-accent-orange/20">
+                    Pending
+                </span>
+</div>
+<div class="grid grid-cols-2 gap-4 py-4 border-y border-white/5">
+<div class="flex items-center gap-3">
+<div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-xl">calendar_today</span>
+</div>
+<div>
+<p class="text-[10px] uppercase text-slate-500 font-bold">Date</p>
+<p class="text-sm font-semibold">Nov 02, 2023</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-xl">schedule</span>
+</div>
+<div>
+<p class="text-[10px] uppercase text-slate-500 font-bold">Time</p>
+<p class="text-sm font-semibold">02:15 PM</p>
+</div>
+</div>
+</div>
+<div class="flex gap-3 pt-1">
+<button class="flex-1 py-3 px-4 rounded-full border border-slate-700 text-sm font-bold hover:bg-white/5 transition-colors">
+                    Cancel
+                </button>
+<button class="flex-1 py-3 px-4 rounded-full bg-primary/20 text-primary text-sm font-bold border border-primary/30 hover:bg-primary/30 transition-all">
+                    View Details
+                </button>
+</div>
+</div>
+<!-- Card 3: Confirmed -->
+<div class="glass-card rounded-xl overflow-hidden p-5 flex flex-col gap-5">
+<div class="flex justify-between items-start">
+<div class="flex gap-4">
+<div class="size-14 rounded-full overflow-hidden ring-2 ring-primary/20">
+<img alt="Doctor Avatar" class="w-full h-full object-cover" data-alt="Portrait of a female specialist doctor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDErVw6nR5s7eFL7-aqCwf23D2i-WtKnx5Qq6pRpAfZQOYsXz4xBt9Cud9z4HmcC4_XhTmh4lHqHNPILDX_306MEFRoMlOFJ38Xabl08FPpjCfmpk83bvVilVrKaxnxVKOm9SwUN8mA9Z6aklvqIdWbd1YkKMYD64ZhvjXNkqrvOiWCJQ5qn-uDba8G0dXR9gUcMGCigyUHqc8q_ndta3uvFdE4gLmQDEn7Ntgpp4rHHcpbTwKdq9DOrG3G1ijSkTc6dCbr7KPTea8"/>
+</div>
+<div>
+<h3 class="text-lg font-bold">Dr. Elena Rodriguez</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Neurology</p>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-accent-teal/10 text-accent-teal border border-accent-teal/20">
+                    Confirmed
+                </span>
+</div>
+<div class="grid grid-cols-2 gap-4 py-4 border-y border-white/5">
+<div class="flex items-center gap-3">
+<div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-xl">calendar_today</span>
+</div>
+<div>
+<p class="text-[10px] uppercase text-slate-500 font-bold">Date</p>
+<p class="text-sm font-semibold">Nov 15, 2023</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="size-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-xl">schedule</span>
+</div>
+<div>
+<p class="text-[10px] uppercase text-slate-500 font-bold">Time</p>
+<p class="text-sm font-semibold">09:00 AM</p>
+</div>
+</div>
+</div>
+<div class="flex gap-3 pt-1">
+<button class="flex-1 py-3 px-4 rounded-full border border-slate-700 text-sm font-bold hover:bg-white/5 transition-colors">
+                    Reschedule
+                </button>
+<button class="flex-1 py-3 px-4 rounded-full bg-primary text-white text-sm font-bold shadow-lg shadow-primary/20 hover:brightness-110 transition-all">
+                    View Results
+                </button>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 ios-blur border-t border-white/10 px-6 pt-3 pb-8 flex justify-between items-center z-50">
+<a class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-semibold">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">calendar_month</span>
+<span class="text-[10px] font-semibold">Appointments</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<div class="size-12 -mt-8 bg-primary rounded-full flex items-center justify-center text-white shadow-lg shadow-primary/40 ring-4 ring-background-dark">
+<span class="material-symbols-outlined text-3xl">add</span>
+</div>
+<span class="text-[10px] font-semibold">New</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-[10px] font-semibold">Analysis</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-semibold">Profile</span>
+</a>
+</nav>
+</body></html>

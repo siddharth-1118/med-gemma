@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Reset Security PIN - MedGemma</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#4387f4",
+            "background-light": "#f5f7f8",
+            "background-dark": "#101722",
+          },
+          fontFamily: {
+            "display": ["Manrope", "sans-serif"]
+          },
+          borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden">
+<!-- Main Container (Mobile Form Factor) -->
+<div class="relative flex min-h-screen w-full max-w-[430px] mx-auto flex-col bg-background-light dark:bg-background-dark overflow-hidden">
+<!-- Top App Bar -->
+<header class="flex items-center px-4 py-4 justify-between">
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-900 dark:text-slate-100">arrow_back</span>
+</button>
+<h1 class="text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-10">Reset Security PIN</h1>
+</header>
+<!-- Progress Stepper -->
+<div class="flex w-full flex-row items-center justify-center gap-3 py-4">
+<div class="h-1.5 w-8 rounded-full bg-primary/30"></div>
+<div class="h-1.5 w-8 rounded-full bg-primary/30"></div>
+<div class="h-1.5 w-12 rounded-full bg-primary shadow-[0_0_8px_rgba(67,135,244,0.5)]"></div>
+</div>
+<!-- Content Area -->
+<div class="flex-1 px-6 overflow-y-auto">
+<div class="flex flex-col items-center text-center mt-4">
+<div class="size-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1">lock_reset</span>
+</div>
+<h2 class="text-2xl font-extrabold leading-tight mb-2">Create New PIN</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium leading-relaxed max-w-[280px]">
+          Enter a new secure PIN to protect your medical records and personal data.
+        </p>
+</div>
+<!-- PIN Input Fields -->
+<div class="mt-10 space-y-8">
+<!-- New PIN -->
+<div class="space-y-3">
+<label class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 px-1">New PIN</label>
+<div class="flex justify-between gap-3 px-2">
+<!-- Active/Filled slot -->
+<div class="flex-1 aspect-square max-w-[50px] rounded-2xl border-2 border-primary bg-primary/5 flex items-center justify-center">
+<div class="size-3 rounded-full bg-primary"></div>
+</div>
+<div class="flex-1 aspect-square max-w-[50px] rounded-2xl border-2 border-primary bg-primary/5 flex items-center justify-center">
+<div class="size-3 rounded-full bg-primary"></div>
+</div>
+<!-- Empty slots -->
+<div class="flex-1 aspect-square max-w-[50px] rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 flex items-center justify-center"></div>
+<div class="flex-1 aspect-square max-w-[50px] rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 flex items-center justify-center"></div>
+</div>
+</div>
+<!-- Confirm New PIN -->
+<div class="space-y-3">
+<label class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 px-1">Confirm New PIN</label>
+<div class="flex justify-between gap-3 px-2">
+<div class="flex-1 aspect-square max-w-[50px] rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 flex items-center justify-center"></div>
+<div class="flex-1 aspect-square max-w-[50px] rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 flex items-center justify-center"></div>
+<div class="flex-1 aspect-square max-w-[50px] rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 flex items-center justify-center"></div>
+<div class="flex-1 aspect-square max-w-[50px] rounded-2xl border-2 border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 flex items-center justify-center"></div>
+</div>
+</div>
+</div>
+<!-- Security Tips -->
+<div class="mt-8 p-4 rounded-xl bg-slate-100 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-xl">info</span>
+<div class="flex-1">
+<p class="text-xs font-semibold text-slate-700 dark:text-slate-300">Security Requirement</p>
+<p class="text-[11px] text-slate-500 dark:text-slate-500 mt-1 leading-tight">
+            Avoid simple sequences like '1234' or repeated numbers like '1111'. Use a unique combination.
+          </p>
+</div>
+</div>
+</div>
+<!-- Numeric Keypad & Bottom Action -->
+<div class="bg-white dark:bg-slate-900/80 backdrop-blur-md rounded-t-[2.5rem] mt-6 border-t border-slate-100 dark:border-slate-800 shadow-2xl">
+<!-- Keypad Grid -->
+<div class="grid grid-cols-3 gap-px p-4">
+<button class="flex h-16 items-center justify-center rounded-2xl text-2xl font-bold active:bg-slate-100 dark:active:bg-slate-800 transition-colors">1</button>
+<button class="flex h-16 items-center justify-center rounded-2xl text-2xl font-bold active:bg-slate-100 dark:active:bg-slate-800 transition-colors">2</button>
+<button class="flex h-16 items-center justify-center rounded-2xl text-2xl font-bold active:bg-slate-100 dark:active:bg-slate-800 transition-colors">3</button>
+<button class="flex h-16 items-center justify-center rounded-2xl text-2xl font-bold active:bg-slate-100 dark:active:bg-slate-800 transition-colors">4</button>
+<button class="flex h-16 items-center justify-center rounded-2xl text-2xl font-bold active:bg-slate-100 dark:active:bg-slate-800 transition-colors">5</button>
+<button class="flex h-16 items-center justify-center rounded-2xl text-2xl font-bold active:bg-slate-100 dark:active:bg-slate-800 transition-colors">6</button>
+<button class="flex h-16 items-center justify-center rounded-2xl text-2xl font-bold active:bg-slate-100 dark:active:bg-slate-800 transition-colors">7</button>
+<button class="flex h-16 items-center justify-center rounded-2xl text-2xl font-bold active:bg-slate-100 dark:active:bg-slate-800 transition-colors">8</button>
+<button class="flex h-16 items-center justify-center rounded-2xl text-2xl font-bold active:bg-slate-100 dark:active:bg-slate-800 transition-colors">9</button>
+<div class="h-16"></div>
+<button class="flex h-16 items-center justify-center rounded-2xl text-2xl font-bold active:bg-slate-100 dark:active:bg-slate-800 transition-colors">0</button>
+<button class="flex h-16 items-center justify-center rounded-2xl text-slate-500 active:bg-slate-100 dark:active:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-3xl">backspace</span>
+</button>
+</div>
+<!-- Main Action Button -->
+<div class="px-6 pb-10 pt-2">
+<button class="w-full bg-primary text-white font-bold py-4 rounded-full shadow-lg shadow-primary/30 active:scale-[0.98] transition-all disabled:opacity-50 disabled:grayscale">
+          Update PIN
+        </button>
+<div class="flex items-center justify-center gap-2 mt-4 opacity-50">
+<span class="material-symbols-outlined text-xs">encrypted</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">End-to-End Encrypted</span>
+</div>
+</div>
+</div>
+<!-- Home Indicator (iOS Style) -->
+<div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-32 h-1 bg-slate-300 dark:bg-slate-800 rounded-full opacity-50"></div>
+</div>
+</body></html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Appointment Request Confirmed</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1f50d6",
+                        "accent-teal": "#2EC4B6",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0B1220",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(31, 41, 55, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .bg-pulse {
+            background: radial-gradient(circle at center, rgba(46, 196, 182, 0.08) 0%, rgba(11, 18, 32, 0) 70%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Main Container -->
+<div class="relative flex flex-col items-center justify-between w-full max-w-md mx-auto min-h-screen p-6 overflow-hidden">
+<!-- Subtle Background Glow -->
+<div class="absolute inset-0 bg-pulse pointer-events-none"></div>
+<!-- Top Navigation Area (Minimalist) -->
+<div class="w-full flex justify-end pt-2">
+<button class="p-2 rounded-full hover:bg-slate-800/50 transition-colors">
+<span class="material-symbols-outlined text-slate-400">close</span>
+</button>
+</div>
+<!-- Central Success Content -->
+<div class="flex-1 flex flex-col items-center justify-center w-full space-y-8">
+<!-- Glowing Teal Checkmark Icon -->
+<div class="relative">
+<div class="absolute inset-0 bg-accent-teal/20 blur-2xl rounded-full scale-150"></div>
+<div class="relative flex items-center justify-center w-24 h-24 rounded-full bg-accent-teal/10 border-2 border-accent-teal shadow-[0_0_20px_rgba(46,196,182,0.4)]">
+<span class="material-symbols-outlined text-accent-teal text-5xl font-bold">check</span>
+</div>
+</div>
+<!-- Header and Description -->
+<div class="text-center space-y-3 px-4">
+<h1 class="text-3xl font-bold tracking-tight text-slate-100">
+                    Appointment Requested
+                </h1>
+<p class="text-slate-400 text-base leading-relaxed">
+                    Your request for a Pulmonology consultation has been sent. You will receive a notification once the specialist confirms.
+                </p>
+</div>
+<!-- Glassmorphic Summary Card -->
+<div class="w-full glass-card rounded-xl p-5 space-y-5 shadow-2xl">
+<div class="flex items-center gap-4">
+<div class="h-14 w-14 rounded-lg overflow-hidden bg-slate-800 border border-slate-700 flex-shrink-0">
+<img alt="Portrait of Dr. Sarah Jenkins" class="w-full h-full object-cover" data-alt="Professional portrait of a female doctor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2akTi_1hvcgf9s_D1pbVQE9rNeQcW7CPyemuhzqWz9Ux1BXrGFe6l8G6O5KgpLsOzijj4Q7E6eP_i6i0kpXGFITjX6tTUmhKBBhNEcHhfgKWDv7XiasEa1z-tkChfTaJrCBs6rDRr2HykdR4BN3yaAk2qdaF_N80sKtZakPpP58PdrQCIXphXjT8ep2kVCU9UiMStUcT0-nHwZ1YvKgMba_UpODzB7r807apxfZvKZB14_5OOur3G5g7_XAQ9bc6aZbXVXWTrf5A"/>
+</div>
+<div class="flex-1">
+<p class="text-sm font-medium text-accent-teal mb-0.5">Primary Provider</p>
+<h3 class="text-lg font-bold text-slate-100">Dr. Sarah Jenkins</h3>
+<p class="text-xs text-slate-400 uppercase tracking-wider">Pulmonology Specialist</p>
+</div>
+</div>
+<div class="h-px bg-slate-700/50 w-full"></div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<div class="flex items-center gap-2 text-slate-400">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+<span class="text-xs font-medium uppercase tracking-tighter">Date</span>
+</div>
+<p class="text-slate-200 font-semibold">Thursday, Oct 24</p>
+</div>
+<div class="space-y-1">
+<div class="flex items-center gap-2 text-slate-400">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span class="text-xs font-medium uppercase tracking-tighter">Time</span>
+</div>
+<p class="text-slate-200 font-semibold">10:30 AM</p>
+</div>
+</div>
+<div class="bg-primary/10 rounded-lg p-3 flex items-start gap-3 border border-primary/20">
+<span class="material-symbols-outlined text-primary text-sm mt-0.5">info</span>
+<p class="text-xs text-slate-300 leading-normal">
+                        This is a preliminary request. Please keep this time slot open until confirmed.
+                    </p>
+</div>
+</div>
+</div>
+<!-- Bottom Action Area -->
+<div class="w-full space-y-4 pt-10 pb-4">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-4 rounded-xl shadow-lg transition-all active:scale-[0.98]">
+                Return to Workspace
+            </button>
+<button class="w-full py-2 text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors flex items-center justify-center gap-1">
+                View My Appointments
+                <span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+<!-- iOS Indicator (Visual only) -->
+<div class="w-32 h-1.5 bg-slate-800 rounded-full mt-4 opacity-50"></div>
+</div>
+</body></html>

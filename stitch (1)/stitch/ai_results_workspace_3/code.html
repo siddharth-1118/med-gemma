@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MedGemma AI Results Workspace (Dark)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "md-sys-dark-primary": "#91ceff",
+                        "md-sys-dark-on-primary": "#00344f",
+                        "md-sys-dark-primary-container": "#004b6f",
+                        "md-sys-dark-on-primary-container": "#c9e6ff",
+                        "md-sys-dark-secondary": "#b7c9d9",
+                        "md-sys-dark-on-secondary": "#1f3340",
+                        "md-sys-dark-secondary-container": "#374957",
+                        "md-sys-dark-on-secondary-container": "#d2e5f5",
+                        "md-sys-dark-surface": "#111416",
+                        "md-sys-dark-on-surface": "#e2e2e5",
+                        "md-sys-dark-surface-variant": "#42474e",
+                        "md-sys-dark-on-surface-variant": "#c2c7cf",
+                        "md-sys-dark-outline": "#8c9198",
+                        "accent-orange": "#ffb4a1",
+                    },
+                    fontFamily: {
+                        "sans": ["Roboto", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body {
+                @apply bg-md-sys-dark-surface text-md-sys-dark-on-surface;
+                -webkit-tap-highlight-color: transparent;
+            }
+        }
+        .m3-card {
+            @apply bg-md-sys-dark-surface-variant/20 rounded-3xl p-4 border border-md-sys-dark-outline/20;
+        }
+        .m3-tab-active {
+            @apply relative text-md-sys-dark-primary font-medium;
+        }
+        .m3-tab-active::after {
+            content: '';
+            @apply absolute -bottom-1 left-1/2 -translate-x-1/2 w-16 h-0.5 bg-md-sys-dark-primary rounded-t-full;
+        }
+        .m3-badge {
+            @apply bg-md-sys-dark-primary-container text-md-sys-dark-on-primary-container text-[10px] font-bold px-2 py-0.5 rounded-full;
+        }
+        .chat-bubble-ai {
+            @apply bg-md-sys-dark-surface-variant text-md-sys-dark-on-surface-variant rounded-2xl rounded-tl-none p-3 text-sm max-w-[85%];
+        }
+        .chat-bubble-user {
+            @apply bg-md-sys-dark-primary-container text-md-sys-dark-on-primary-container rounded-2xl rounded-tr-none p-3 text-sm max-w-[85%] self-end;
+        }
+        .attention-region {
+            @apply border-2 border-accent-orange bg-accent-orange/10 ring-1 ring-accent-orange/20;
+        }
+        .attention-label {
+            @apply bg-accent-orange text-black text-[10px] font-bold px-1.5 py-0.5 rounded-sm;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex flex-col h-screen overflow-hidden">
+<header class="flex items-center justify-between px-4 py-3 bg-md-sys-dark-surface">
+<div class="flex items-center gap-4">
+<button class="p-2 -ml-2 rounded-full hover:bg-md-sys-dark-surface-variant/30 transition-colors">
+<span class="material-symbols-outlined text-[24px] text-md-sys-dark-primary">arrow_back</span>
+</button>
+<div>
+<h1 class="text-lg font-normal leading-tight">AI Results</h1>
+<p class="text-xs text-md-sys-dark-on-surface-variant">MedGemma #4482-A</p>
+</div>
+</div>
+<div class="flex gap-1">
+<button class="p-2 rounded-full hover:bg-md-sys-dark-surface-variant/30 transition-colors">
+<span class="material-symbols-outlined text-[24px] text-md-sys-dark-primary">share</span>
+</button>
+<button class="p-2 rounded-full hover:bg-md-sys-dark-surface-variant/30 transition-colors">
+<span class="material-symbols-outlined text-[24px] text-md-sys-dark-primary">more_vert</span>
+</button>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto pb-40">
+<div class="relative w-full aspect-square bg-[#000] flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 opacity-90">
+<div class="w-full h-full bg-cover bg-center grayscale contrast-125" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDOAOyjtnyS0YwDDbLcRxbUnp9UEpMPQo76pzvo_dCFvZrKM2wwqIkMVIwPD4IZPZ0XhAXFBcUzElEAbvKNGjetV6ESooM8M3XQWskh-_S-_FZZuqWgrwrIUKjOmxNthcMDyGCkTnwTU224tTOGKsFDoodMnvZzruOztV9tLT-cuwEJD7gBfllA2w6us65j_yo1QbTm1OtwAq5R9zxPlZrruRLGvLeegvkt8wj13gHG5QaKXf7_MYBXzv6qmOsnFZKsfc5GlchoEc8')"></div>
+</div>
+<div class="absolute top-1/4 left-1/3 w-28 h-20 attention-region">
+<span class="absolute -top-5 left-0 attention-label">REGION ALPHA</span>
+</div>
+<div class="absolute bottom-1/3 right-1/4 w-16 h-16 attention-region border-dashed opacity-80">
+<span class="absolute -top-5 left-0 attention-label opacity-80">REGION BETA</span>
+</div>
+<div class="absolute bottom-4 right-4 flex flex-col gap-2">
+<button class="w-10 h-10 bg-md-sys-dark-surface-variant/80 backdrop-blur rounded-xl flex items-center justify-center shadow-lg text-md-sys-dark-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">zoom_in</span>
+</button>
+<button class="w-10 h-10 bg-md-sys-dark-surface-variant/80 backdrop-blur rounded-xl flex items-center justify-center shadow-lg text-md-sys-dark-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">contrast</span>
+</button>
+<button class="w-10 h-10 bg-md-sys-dark-surface-variant/80 backdrop-blur rounded-xl flex items-center justify-center shadow-lg text-md-sys-dark-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">layers</span>
+</button>
+</div>
+</div>
+<div class="sticky top-0 z-20 bg-md-sys-dark-surface/95 backdrop-blur border-b border-md-sys-dark-outline/10">
+<div class="flex px-4 pt-4">
+<button class="flex-1 pb-3 text-sm font-medium m3-tab-active">Analysis</button>
+<button class="flex-1 pb-3 text-sm font-medium text-md-sys-dark-on-surface-variant">Symptoms</button>
+<button class="flex-1 pb-3 text-sm font-medium text-md-sys-dark-on-surface-variant">AI Consult</button>
+</div>
+</div>
+<div class="p-4 space-y-6">
+<section>
+<div class="flex items-center justify-between mb-3">
+<h2 class="text-xs font-bold text-md-sys-dark-on-surface-variant tracking-widest uppercase">Clinical Findings</h2>
+<span class="m3-badge">92.4% CONFIDENCE</span>
+</div>
+<div class="space-y-3">
+<div class="m3-card">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-accent-orange mt-0.5" style="font-variation-settings: 'FILL' 1">error</span>
+<p class="text-sm leading-relaxed text-md-sys-dark-on-surface">Hyperinflation noted, consistent with COPD morphology in Region Alpha.</p>
+</div>
+</div>
+<div class="m3-card">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-md-sys-dark-primary mt-0.5" style="font-variation-settings: 'FILL' 1">check_circle</span>
+<p class="text-sm leading-relaxed text-md-sys-dark-on-surface">Increased bronchovascular markings in bilateral lower lobes.</p>
+</div>
+</div>
+<div class="m3-card border-dashed bg-transparent">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-md-sys-dark-on-surface-variant mt-0.5">info</span>
+<p class="text-xs italic text-md-sys-dark-on-surface-variant">Model performance may be impacted by rotation. Suggest lateral view for definitive ruling.</p>
+</div>
+</div>
+</div>
+</section>
+<section>
+<h2 class="text-xs font-bold text-md-sys-dark-on-surface-variant tracking-widest uppercase mb-3">Review Suggestions</h2>
+<div class="flex gap-3 overflow-x-auto no-scrollbar -mx-4 px-4">
+<div class="flex-shrink-0 w-36 p-4 rounded-3xl bg-md-sys-dark-secondary-container text-md-sys-dark-on-secondary-container">
+<span class="material-symbols-outlined mb-2 text-md-sys-dark-primary" style="font-variation-settings: 'FILL' 1">respiratory_rate</span>
+<h4 class="font-bold text-sm">Dyspnea</h4>
+<p class="text-[10px] mt-1 opacity-70">Acute shortness of breath</p>
+</div>
+<div class="flex-shrink-0 w-36 p-4 rounded-3xl bg-md-sys-dark-secondary-container text-md-sys-dark-on-secondary-container">
+<span class="material-symbols-outlined mb-2 text-md-sys-dark-primary">thermometer</span>
+<h4 class="font-bold text-sm">Pyrexia</h4>
+<p class="text-[10px] mt-1 opacity-70">Elevated temperature</p>
+</div>
+<div class="flex-shrink-0 w-36 p-4 rounded-3xl bg-md-sys-dark-secondary-container text-md-sys-dark-on-secondary-container">
+<span class="material-symbols-outlined mb-2 text-md-sys-dark-primary">stethoscope</span>
+<h4 class="font-bold text-sm">Wheezing</h4>
+<p class="text-[10px] mt-1 opacity-70">Auscultatory signs</p>
+</div>
+</div>
+</section>
+<section class="space-y-3 pb-8">
+<h2 class="text-xs font-bold text-md-sys-dark-on-surface-variant tracking-widest uppercase mb-3">AI Consult Preview</h2>
+<div class="flex flex-col gap-3">
+<div class="chat-bubble-ai">
+                        What is the patient's smoking history? COPD indicators are strong in the upper lobes.
+                    </div>
+<div class="chat-bubble-user">
+                        Patient reports 20 pack-year history.
+                    </div>
+</div>
+</section>
+</div>
+</main>
+<footer class="fixed bottom-0 left-0 right-0 bg-md-sys-dark-surface/90 backdrop-blur-xl border-t border-md-sys-dark-outline/10 p-4 pb-8 flex flex-col gap-3 z-30">
+<button class="w-full h-14 bg-md-sys-dark-primary text-md-sys-dark-on-primary rounded-full flex items-center justify-center gap-2 shadow-lg active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">description</span>
+<span class="font-bold">Download Report</span>
+</button>
+<div class="flex justify-center">
+<button class="text-sm font-medium text-md-sys-dark-primary flex items-center gap-2 py-2">
+<span class="material-symbols-outlined text-lg">upload</span>
+                New Patient Upload
+            </button>
+</div>
+<div class="w-32 h-1.5 bg-md-sys-dark-on-surface/20 rounded-full mx-auto mt-2"></div>
+</footer>
+
+</body></html>

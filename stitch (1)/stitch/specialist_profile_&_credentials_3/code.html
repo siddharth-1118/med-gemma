@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Specialist Profile (Dark)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&amp;family=Roboto:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "m3-primary": "#D0E4FF",
+                        "m3-on-primary": "#002D6F",
+                        "m3-primary-container": "#004494",
+                        "m3-on-primary-container": "#D7E2FF",
+                        "m3-secondary": "#C3C6CF",
+                        "m3-on-secondary": "#2D3139",
+                        "m3-secondary-container": "#44474E",
+                        "m3-on-secondary-container": "#E1E2EC",
+                        "m3-surface": "#1A1C1E",
+                        "m3-surface-container": "#212429",
+                        "m3-surface-variant": "#44474E",
+                        "m3-on-surface": "#E2E2E6",
+                        "m3-on-surface-variant": "#C4C6D0",
+                        "m3-outline": "#8E9199",
+                        "google-blue-dark": "#A8C7FA"
+                    },
+                    fontFamily: {
+                        "sans": ["Roboto", "sans-serif"],
+                        "google-sans": ["Google Sans", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body {
+                @apply bg-m3-surface text-m3-on-surface font-sans;
+            }
+            h1, h2, h3, h4 {
+                @apply font-google-sans font-medium;
+            }
+        }
+        .m3-card {
+            @apply bg-m3-surface-container rounded-[24px] p-6 border border-m3-surface-variant;
+        }
+        .filter-chip-dark {
+            @apply flex items-center px-3 py-1.5 rounded-lg bg-m3-secondary-container text-sm font-medium text-m3-on-secondary-container hover:bg-m3-surface-variant transition-colors;
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen pb-24">
+<nav class="sticky top-0 z-50 flex items-center h-16 px-4 bg-m3-surface/90 backdrop-blur-md">
+<button class="flex items-center justify-center size-12 rounded-full hover:bg-m3-on-surface/10 transition-colors">
+<span class="material-symbols-outlined text-m3-on-surface">arrow_back</span>
+</button>
+<h1 class="flex-1 ml-2 text-xl text-m3-on-surface">Specialist Profile</h1>
+<button class="flex items-center justify-center size-12 rounded-full hover:bg-m3-on-surface/10 transition-colors">
+<span class="material-symbols-outlined text-m3-on-surface">more_vert</span>
+</button>
+</nav>
+<main class="max-w-md mx-auto">
+<section class="flex flex-col items-center pt-8 px-6 text-center">
+<div class="relative mb-6">
+<div class="size-40 rounded-full p-1 border-2 border-m3-primary-container">
+<img alt="Dr. Julian Vane" class="w-full h-full object-cover rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDv0rR32mtsqN0iSFmw0XwyxVsJEr6b-07sUG4lvzzDYijd6aEcgu3fU6Ro8a3x9WX9U286SjU25uuFOpiL3HUsH43O8_wU_99bXuDoMnxGmuTcLvfZcG5XfY6FgycI-tNQM61O7jrc0AI9j7hxgHNmK2Qw9ceTtqyP2plbWrT6uyMOw7X1rk4kB2fc8TevmarTAQvY__Tkn7yagDCoz_iqKhMpPG_pJvHm8nI6McASZ_7DGntZHr03yub0VDUNzploEPuvuXYcTX0"/>
+</div>
+<div class="absolute bottom-2 right-2 bg-m3-surface-container rounded-full p-0.5 shadow-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-google-blue-dark text-[28px] fill-1">verified</span>
+</div>
+</div>
+<h2 class="text-3xl text-m3-on-surface mb-1">Dr. Julian Vane</h2>
+<p class="text-lg text-m3-primary font-medium mb-3">Senior Pulmonologist</p>
+<p class="text-m3-on-surface-variant text-sm max-w-xs leading-relaxed mb-8">
+                Pioneering AI-assisted thoracic diagnostics and chronic respiratory care at MedGemma Clinical Center.
+            </p>
+</section>
+<div class="px-4 mb-8">
+<div class="grid grid-cols-3 gap-3 bg-m3-primary-container/20 p-4 rounded-[28px] border border-m3-primary-container/30">
+<div class="flex flex-col items-center">
+<span class="text-2xl font-bold text-m3-primary">15+</span>
+<span class="text-[11px] font-medium text-m3-on-surface-variant uppercase tracking-wider">Experience</span>
+</div>
+<div class="flex flex-col items-center border-x border-m3-outline/20">
+<span class="text-2xl font-bold text-m3-primary">98%</span>
+<span class="text-[11px] font-medium text-m3-on-surface-variant uppercase tracking-wider">Success</span>
+</div>
+<div class="flex flex-col items-center">
+<div class="flex items-center gap-0.5">
+<span class="text-2xl font-bold text-m3-primary">4.9</span>
+<span class="material-symbols-outlined text-sm fill-1 text-m3-primary">star</span>
+</div>
+<span class="text-[11px] font-medium text-m3-on-surface-variant uppercase tracking-wider">Rating</span>
+</div>
+</div>
+</div>
+<section class="px-6 mb-8">
+<h3 class="text-lg text-m3-on-surface mb-4">Verified Credentials</h3>
+<div class="space-y-3">
+<div class="flex items-center gap-4 p-4 rounded-2xl bg-m3-surface-container border border-m3-surface-variant">
+<div class="size-12 rounded-xl bg-m3-primary text-m3-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">workspace_premium</span>
+</div>
+<div class="flex-1">
+<h4 class="text-sm text-m3-on-surface">ABIM Board Certified</h4>
+<p class="text-xs text-m3-on-surface-variant">Internal Medicine &amp; Pulmonary Disease</p>
+</div>
+<span class="material-symbols-outlined text-google-blue-dark fill-1">check_circle</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-2xl bg-m3-surface-container border border-m3-surface-variant">
+<div class="size-12 rounded-xl bg-m3-primary text-m3-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">school</span>
+</div>
+<div class="flex-1">
+<h4 class="text-sm text-m3-on-surface">Fellowship Registry</h4>
+<p class="text-xs text-m3-on-surface-variant">Pulmonary Disease Specialty Fellowship</p>
+</div>
+<span class="material-symbols-outlined text-google-blue-dark fill-1">check_circle</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-2xl bg-m3-surface-container border border-m3-surface-variant">
+<div class="size-12 rounded-xl bg-m3-primary text-m3-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">badge</span>
+</div>
+<div class="flex-1">
+<h4 class="text-sm text-m3-on-surface">GMC Specialist Register</h4>
+<p class="text-xs text-m3-on-surface-variant">Certified Medical Practitioner #89210</p>
+</div>
+<span class="material-symbols-outlined text-google-blue-dark fill-1">check_circle</span>
+</div>
+</div>
+</section>
+<section class="px-6 mb-12">
+<h3 class="text-lg text-m3-on-surface mb-4">Clinical Expertise</h3>
+<div class="flex flex-wrap gap-2">
+<button class="filter-chip-dark">
+<span class="material-symbols-outlined text-[18px] mr-2">check</span>
+                    Thoracic Imaging
+                </button>
+<button class="filter-chip-dark">
+                    Chronic Care
+                </button>
+<button class="filter-chip-dark">
+                    Bronchoscopy
+                </button>
+<button class="filter-chip-dark">
+                    Interstitial Lung Disease
+                </button>
+<button class="filter-chip-dark">
+                    COPD Management
+                </button>
+<button class="filter-chip-dark">
+                    Cystic Fibrosis
+                </button>
+</div>
+</section>
+</main>
+<div class="fixed bottom-0 left-0 right-0 p-4 bg-m3-surface/90 backdrop-blur-md border-t border-m3-surface-variant">
+<button class="w-full bg-m3-primary hover:bg-m3-primary/90 text-m3-on-primary font-medium py-4 rounded-full flex items-center justify-center gap-3 shadow-lg active:scale-95 transition-all">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-google-sans">Schedule Consultation</span>
+</button>
+</div>
+
+</body></html>

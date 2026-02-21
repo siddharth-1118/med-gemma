@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Specialist Profile &amp; Credentials</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1f50d6",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0B1220",
+                        "accent-teal": "#14b8a6",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-header {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .pulse-primary {
+            box-shadow: 0 0 0 0 rgba(31, 80, 214, 0.7);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(31, 80, 214, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(31, 80, 214, 0); }
+            100% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(31, 80, 214, 0); }
+        }
+        .bg-glow {
+            background: radial-gradient(circle at 50% 0%, rgba(31, 80, 214, 0.15) 0%, transparent 70%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen pb-32 overflow-x-hidden">
+<!-- Top Navigation -->
+<nav class="sticky top-0 z-50 flex items-center justify-between p-4 bg-background-dark/80 backdrop-blur-md">
+<button class="flex items-center justify-center size-10 rounded-full bg-white/5 border border-white/10 text-slate-100">
+<span class="material-symbols-outlined">arrow_back_ios_new</span>
+</button>
+<h1 class="text-sm font-semibold tracking-wide uppercase text-slate-400">Doctor Profile</h1>
+<button class="flex items-center justify-center size-10 rounded-full bg-white/5 border border-white/10 text-slate-100">
+<span class="material-symbols-outlined">share</span>
+</button>
+</nav>
+<main class="relative bg-glow">
+<!-- Hero Profile Section -->
+<div class="px-4 pt-6 pb-8">
+<div class="glass-header rounded-xl p-8 flex flex-col items-center text-center">
+<div class="relative mb-6">
+<div class="absolute inset-0 bg-primary/30 blur-2xl rounded-full"></div>
+<div class="relative size-32 rounded-full border-4 border-primary/20 p-1 overflow-hidden">
+<img alt="Portrait of Dr. Julian Vane" class="w-full h-full object-cover rounded-full" data-alt="Close up professional portrait of a male doctor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDv0rR32mtsqN0iSFmw0XwyxVsJEr6b-07sUG4lvzzDYijd6aEcgu3fU6Ro8a3x9WX9U286SjU25uuFOpiL3HUsH43O8_wU_99bXuDoMnxGmuTcLvfZcG5XfY6FgycI-tNQM61O7jrc0AI9j7hxgHNmK2Qw9ceTtqyP2plbWrT6uyMOw7X1rk4kB2fc8TevmarTAQvY__Tkn7yagDCoz_iqKhMpPG_pJvHm8nI6McASZ_7DGntZHr03yub0VDUNzploEPuvuXYcTX0"/>
+</div>
+<div class="absolute bottom-1 right-1 bg-primary text-white size-8 rounded-full border-4 border-[#1c2333] flex items-center justify-center">
+<span class="material-symbols-outlined text-xs">verified</span>
+</div>
+</div>
+<h2 class="text-3xl font-bold tracking-tight text-white mb-1">Dr. Julian Vane</h2>
+<p class="text-primary font-medium text-lg mb-4">Senior Pulmonologist</p>
+<p class="text-slate-400 text-sm max-w-xs leading-relaxed">
+                    Pioneering AI-assisted thoracic diagnostics and chronic respiratory care at MedGemma Clinical Center.
+                </p>
+</div>
+</div>
+<!-- Stats Row -->
+<div class="px-4 flex gap-3 mb-8">
+<div class="flex-1 glass-header rounded-xl p-4 flex flex-col items-center justify-center gap-1 border-white/5">
+<span class="text-primary material-symbols-outlined mb-1">work_history</span>
+<span class="text-lg font-bold text-white">15+</span>
+<span class="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Experience</span>
+</div>
+<div class="flex-1 glass-header rounded-xl p-4 flex flex-col items-center justify-center gap-1 border-white/5">
+<span class="text-accent-teal material-symbols-outlined mb-1">vital_signs</span>
+<span class="text-lg font-bold text-white">98%</span>
+<span class="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Success</span>
+</div>
+<div class="flex-1 glass-header rounded-xl p-4 flex flex-col items-center justify-center gap-1 border-white/5">
+<span class="text-amber-400 material-symbols-outlined mb-1">grade</span>
+<span class="text-lg font-bold text-white">4.9</span>
+<span class="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Rating</span>
+</div>
+</div>
+<!-- Credentials Section -->
+<section class="px-6 mb-8">
+<h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">verified_user</span>
+                Verified Credentials
+            </h3>
+<div class="space-y-3">
+<div class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
+<div class="size-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">workspace_premium</span>
+</div>
+<div class="flex-1">
+<h4 class="text-sm font-semibold text-white">ABIM Board Certified</h4>
+<p class="text-xs text-slate-400">Internal Medicine &amp; Pulmonary Disease</p>
+</div>
+<span class="material-symbols-outlined text-accent-teal text-sm">check_circle</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
+<div class="size-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">school</span>
+</div>
+<div class="flex-1">
+<h4 class="text-sm font-semibold text-white">Fellowship Registry</h4>
+<p class="text-xs text-slate-400">Pulmonary Disease Specialty Fellowship</p>
+</div>
+<span class="material-symbols-outlined text-accent-teal text-sm">check_circle</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
+<div class="size-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">badge</span>
+</div>
+<div class="flex-1">
+<h4 class="text-sm font-semibold text-white">GMC Specialist Register</h4>
+<p class="text-xs text-slate-400">Certified Medical Practitioner #89210</p>
+</div>
+<span class="material-symbols-outlined text-accent-teal text-sm">check_circle</span>
+</div>
+</div>
+</section>
+<!-- Clinical Expertise Section -->
+<section class="px-6 mb-8">
+<h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-accent-teal">clinical_notes</span>
+                Clinical Expertise
+            </h3>
+<div class="flex flex-wrap gap-2">
+<span class="px-4 py-2 rounded-full bg-accent-teal/10 border border-accent-teal/20 text-accent-teal text-xs font-semibold">Thoracic Imaging</span>
+<span class="px-4 py-2 rounded-full bg-accent-teal/10 border border-accent-teal/20 text-accent-teal text-xs font-semibold">Chronic Care</span>
+<span class="px-4 py-2 rounded-full bg-accent-teal/10 border border-accent-teal/20 text-accent-teal text-xs font-semibold">Bronchoscopy</span>
+<span class="px-4 py-2 rounded-full bg-accent-teal/10 border border-accent-teal/20 text-accent-teal text-xs font-semibold">Interstitial Lung Disease</span>
+<span class="px-4 py-2 rounded-full bg-accent-teal/10 border border-accent-teal/20 text-accent-teal text-xs font-semibold">COPD Management</span>
+<span class="px-4 py-2 rounded-full bg-accent-teal/10 border border-accent-teal/20 text-accent-teal text-xs font-semibold">Cystic Fibrosis</span>
+</div>
+</section>
+</main>
+<!-- Bottom Action Button -->
+<div class="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-background-dark via-background-dark/95 to-transparent backdrop-blur-sm">
+<button class="pulse-primary w-full bg-primary hover:bg-primary/90 text-white font-bold py-5 rounded-full flex items-center justify-center gap-3 transition-all active:scale-95 shadow-2xl shadow-primary/40">
+<span class="material-symbols-outlined">calendar_month</span>
+<span>Schedule Consultation</span>
+</button>
+</div>
+</body></html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clinical Pulse Entry - MedGemma</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#136dec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101822",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-shard {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .pulse-glow {
+            filter: drop-shadow(0 0 8px rgba(19, 109, 236, 0.6));
+        }
+        .radial-bg {
+            background: radial-gradient(circle at center, #ffffff 0%, #f1f5f9 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display antialiased overflow-hidden">
+<!-- Main iOS Splash Container -->
+<div class="relative flex h-screen w-full flex-col radial-bg dark:bg-background-dark items-center justify-between overflow-hidden">
+<!-- Status Bar Area (Placeholder) -->
+<div class="w-full h-12 px-8 flex justify-between items-center opacity-40">
+<span class="text-xs font-bold text-slate-900 dark:text-slate-100">9:41</span>
+<div class="flex gap-1.5">
+<span class="material-symbols-outlined text-[14px]">signal_cellular_4_bar</span>
+<span class="material-symbols-outlined text-[14px]">wifi</span>
+<span class="material-symbols-outlined text-[14px]">battery_full</span>
+</div>
+</div>
+<!-- Central VFX Visual Area -->
+<div class="relative flex flex-col items-center justify-center flex-1 w-full">
+<!-- Glassmorphic Background Shards (VFX Effect) -->
+<div class="absolute inset-0 pointer-events-none overflow-hidden">
+<div class="glass-shard absolute top-[20%] left-[-10%] w-48 h-48 rotate-[15deg] rounded-xl opacity-40"></div>
+<div class="glass-shard absolute bottom-[15%] right-[-5%] w-64 h-32 rotate-[-12deg] rounded-full opacity-30"></div>
+<div class="glass-shard absolute top-[40%] right-[10%] w-12 h-12 rotate-[45deg] rounded-lg opacity-20"></div>
+</div>
+<!-- Morphing Logo & Pulse Container -->
+<div class="relative z-10 flex flex-col items-center">
+<!-- Pulse Path Animation Representation -->
+<div class="relative h-48 w-80 flex items-center justify-center mb-8">
+<svg class="w-full h-full text-primary pulse-glow" viewbox="0 0 400 200">
+<path d="M0,100 L120,100 L140,40 L165,160 L190,80 L210,120 L230,100 L400,100" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<!-- Pulse Dot/Light Head -->
+<circle cx="230" cy="100" fill="currentColor" r="4">
+<animate attributename="cx" dur="1s" repeatcount="indefinite" values="230;400"></animate>
+</circle>
+</svg>
+<!-- Overlaying Logo Transition Start -->
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="size-24 bg-white/60 dark:bg-slate-800/60 backdrop-blur-md rounded-full border border-white/40 flex items-center justify-center shadow-2xl shadow-primary/20">
+<div class="size-16 flex items-center justify-center relative">
+<span class="material-symbols-outlined text-primary text-[64px]" style="font-variation-settings: 'FILL' 1, 'wght' 400;">
+                                    ecg_heart
+                                </span>
+<!-- Google Colors Accent Rings -->
+<div class="absolute -inset-2 border-2 border-red-400 rounded-full opacity-20"></div>
+<div class="absolute -inset-3 border-2 border-green-400 rounded-full opacity-10"></div>
+<div class="absolute -inset-4 border-2 border-yellow-400 rounded-full opacity-5"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Branding Text Area -->
+<div class="text-center space-y-2 translate-y-4">
+<h1 class="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
+                        Med<span class="text-primary">Gemma</span>
+</h1>
+<p class="text-slate-500 dark:text-slate-400 font-medium text-lg tracking-wide uppercase text-[12px]">
+                        Multimodal Doctor Support
+                    </p>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation / Biometric Trigger Area -->
+<div class="w-full px-8 pb-12 flex flex-col items-center space-y-8">
+<!-- Biometric Prompt Simulation -->
+<div class="flex flex-col items-center animate-pulse">
+<div class="size-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-primary text-[40px]">face</span>
+</div>
+<p class="text-slate-400 dark:text-slate-500 text-sm font-medium">Verifying Clinical ID...</p>
+</div>
+<!-- Loading Progress Bar -->
+<div class="w-full max-w-[240px] h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-2/3 rounded-full"></div>
+</div>
+<!-- Footer Message -->
+<div class="flex items-center gap-2 text-slate-400">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+<span class="text-[11px] uppercase tracking-widest font-bold">Secure Clinical Environment</span>
+</div>
+<!-- iOS Home Indicator -->
+<div class="w-32 h-1.5 bg-slate-300 dark:bg-slate-700 rounded-full mt-4"></div>
+</div>
+<!-- Decorative Floating Elements -->
+<div class="absolute top-[10%] right-[15%] size-4 bg-primary/20 rounded-full blur-sm"></div>
+<div class="absolute bottom-[20%] left-[10%] size-8 bg-blue-400/10 rounded-full blur-md"></div>
+</div>
+<!-- Hidden Image Data Alt Tags for System Compliance -->
+<div class="hidden">
+<div data-alt="Abstract 3D heartbeat medical pulse graphic blue"></div>
+<div data-alt="Soft white and gray clinical gradient background"></div>
+<div data-alt="Modern medical logo with glassmorphic layers"></div>
+</div>
+</body></html>

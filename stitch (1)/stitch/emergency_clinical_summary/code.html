@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Emergency Clinical Summary - MedGemma</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ef4343",
+                        "secondary": "#2ec4b6",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#0b1220",
+                        "card-bg": "rgba(255, 255, 255, 0.05)",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .pulse-red {
+            box-shadow: 0 0 0 0 rgba(239, 67, 67, 0.7);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 67, 67, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 67, 67, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 67, 67, 0); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<!-- Top Navigation / Status Header -->
+<div class="sticky top-0 z-50 bg-background-dark/80 backdrop-blur-md border-b border-white/10">
+<div class="flex items-center p-4 justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-white cursor-pointer">arrow_back_ios</span>
+<div>
+<h2 class="text-primary text-xs font-extrabold tracking-[0.2em] uppercase leading-none mb-1">Critical Status</h2>
+<p class="text-white text-lg font-bold leading-tight">Robert Chen, 62</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<div class="bg-primary/20 p-2 rounded-full pulse-red">
+<span class="material-symbols-outlined text-primary text-xl">warning</span>
+</div>
+</div>
+</div>
+</div>
+<main class="p-4 pb-40 space-y-4">
+<!-- Location Map Snippet -->
+<div class="relative overflow-hidden rounded-xl h-32 w-full glass-card">
+<div class="absolute inset-0 bg-cover bg-center opacity-60" data-alt="Map showing patient live location in downtown area" data-location="San Francisco, CA" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD9cAuyW1Dfss8tGaqRQjIilsz-GbzxE7NnEI_YMIh3mBhcYgTJDu7IGUdYB35IpIgyqPNZ-Zy2MBaREIzz2yrPz9-DHbtFtIvhSP1LdeueJEsUQ3T03QFVFnB14UZVucMlcEz9qdUlzmSRrz2OR5wZdhrejTYK2DmGdBC7Qp9JnD6WYBO06Tw2pSeqcdRIHuv0taEhYh-9MR-3_BQu4MlBbcTgSI-3xw30hlEutvQWaJWedsK0bC1Wmog4IEr3gVdzwOkHkslvyuY');">
+</div>
+<div class="absolute bottom-2 left-2 flex items-center gap-2 bg-background-dark/80 px-3 py-1.5 rounded-lg border border-white/10">
+<span class="material-symbols-outlined text-primary text-sm">location_on</span>
+<span class="text-xs font-semibold">ICU West Wing, Room 402</span>
+</div>
+</div>
+<!-- Latest AI Findings -->
+<section>
+<h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3 px-1">Latest AI Findings</h3>
+<div class="glass-card rounded-xl overflow-hidden border-l-4 border-primary">
+<div class="p-4 flex gap-4">
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-primary text-[10px] font-bold bg-primary/10 px-2 py-0.5 rounded uppercase">Critical Alert</span>
+<span class="text-slate-400 text-[10px] font-medium">2 mins ago</span>
+</div>
+<h4 class="text-lg font-bold text-white mb-2">Acute Pulmonary Edema Detected</h4>
+<p class="text-sm text-slate-400 leading-relaxed">
+                            AI analysis of multimodal lung scans and real-time audio biomarkers indicates high-probability fluid accumulation.
+                        </p>
+<div class="mt-4 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-sm">verified</span>
+<span class="text-xs font-semibold text-secondary">98% Confidence Score</span>
+</div>
+<span class="material-symbols-outlined text-slate-500">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Current Vital Trends -->
+<section>
+<h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3 px-1">Current Vital Trends</h3>
+<div class="grid grid-cols-2 gap-4">
+<!-- Heart Rate -->
+<div class="glass-card p-4 rounded-xl">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined text-primary">favorite</span>
+<span class="text-primary material-symbols-outlined text-sm">trending_up</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="text-3xl font-extrabold text-white leading-none">114</span>
+<span class="text-xs font-medium text-slate-400">BPM</span>
+</div>
+<p class="text-[10px] text-primary font-bold mt-1">Tachycardia Warning</p>
+<div class="mt-3 h-1 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[85%]"></div>
+</div>
+</div>
+<!-- SpO2 -->
+<div class="glass-card p-4 rounded-xl">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined text-blue-400">air</span>
+<span class="text-red-400 material-symbols-outlined text-sm">trending_down</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="text-3xl font-extrabold text-white leading-none">89</span>
+<span class="text-xs font-medium text-slate-400">%</span>
+</div>
+<p class="text-[10px] text-red-400 font-bold mt-1">Critical Hypoxia</p>
+<div class="mt-3 h-1 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-red-400 w-[45%]"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Active Medications -->
+<section>
+<h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3 px-1">Active Medications</h3>
+<div class="glass-card rounded-xl divide-y divide-white/5">
+<div class="p-3 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="bg-blue-500/10 p-2 rounded-lg">
+<span class="material-symbols-outlined text-blue-400 text-xl">medication</span>
+</div>
+<div>
+<p class="text-sm font-bold text-white">Furosemide (Lasix)</p>
+<p class="text-[11px] text-slate-400">40mg IV - Last Admin: 08:15 AM</p>
+</div>
+</div>
+<span class="text-[10px] font-bold text-blue-400 uppercase">Diuretic</span>
+</div>
+<div class="p-3 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="bg-orange-500/10 p-2 rounded-lg">
+<span class="material-symbols-outlined text-orange-400 text-xl">pill</span>
+</div>
+<div>
+<p class="text-sm font-bold text-white">Heparin Infusion</p>
+<p class="text-[11px] text-slate-400">Continuous 12 units/kg/hr</p>
+</div>
+</div>
+<span class="text-[10px] font-bold text-orange-400 uppercase">Anticoagulant</span>
+</div>
+</div>
+</section>
+<!-- Doctor's Note Section -->
+<section>
+<h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3 px-1">Specialist Observation</h3>
+<div class="bg-slate-900/50 rounded-xl p-4 border border-white/5 relative">
+<span class="material-symbols-outlined absolute top-4 right-4 text-slate-600">edit_note</span>
+<p class="text-sm text-slate-300 italic leading-relaxed">
+                    "Patient presenting with increasing respiratory distress. Rales heard in lower lung fields. Consider escalating to BiPAP if SpO2 drops below 88% on current O2 titration."
+                </p>
+<div class="mt-3 flex items-center gap-2">
+<div class="size-6 rounded-full bg-center bg-cover" data-alt="Headshot of Dr. Sarah Jenkins, Lead Cardiologist" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC8ukdCJ15DDVXk7vH-sEdVA4XEqmztwoUkxDKsAvF6DLJn3hgRqQSCP0M7oKei0dnTer1Cmv2syn3qycu8eXPtrRRWy2Ufx16Uv0-4IFQCZDWS_nZ7oYqka5HrFNxwMqGZvjLuVOcWJlhi9f14-KPczZJC8Gcmm7oVXIUCzSAQ_DDk1k19r5DZArXCCKPjKGZHx7J5YjElOUHwTWsGYtQ-xvV-4TfXXoK7bH6oR2HKCiFQiY7tjuoaoLSDYsVy_xE_9a5A30vSvhk');"></div>
+<p class="text-xs font-semibold text-slate-400">Dr. Sarah Jenkins • 09:42 AM</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Fixed Action Bar -->
+<div class="fixed bottom-0 left-0 right-0 p-4 bg-background-dark/90 backdrop-blur-xl border-t border-white/10">
+<div class="max-w-md mx-auto space-y-3">
+<button class="w-full bg-primary hover:bg-red-600 transition-colors h-14 rounded-xl flex items-center justify-center gap-3 text-white font-extrabold text-lg shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">emergency_share</span>
+                CALL EMERGENCY SERVICES
+            </button>
+<button class="w-full bg-secondary/10 hover:bg-secondary/20 transition-colors border border-secondary/30 h-12 rounded-xl flex items-center justify-center gap-2 text-secondary font-bold text-sm">
+<span class="material-symbols-outlined text-sm">ios_share</span>
+                SHARE WITH FIRST RESPONDERS
+            </button>
+</div>
+</div>
+</body></html>

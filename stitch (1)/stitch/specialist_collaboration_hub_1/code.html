@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Specialist Collaboration Hub - MedGemma</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ff9f1a",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#0B1220",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glow-orange {
+            box-shadow: 0 0 40px rgba(255, 159, 26, 0.25);
+        }
+        .pulse-slow {
+            animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.15; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(1.1); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-display overflow-hidden">
+<!-- Top Navigation Bar (iOS Style) -->
+<div class="flex items-center px-6 pt-12 pb-4 justify-between w-full">
+<button class="flex size-10 items-center justify-center rounded-full glass">
+<span class="material-symbols-outlined text-slate-100">arrow_back_ios_new</span>
+</button>
+<div class="flex flex-col items-center">
+<span class="text-[10px] uppercase tracking-[0.2em] text-primary font-bold">MedGemma AI</span>
+<h2 class="text-white text-sm font-semibold tracking-tight">Collaboration Hub</h2>
+</div>
+<button class="flex size-10 items-center justify-center rounded-full glass">
+<span class="material-symbols-outlined text-slate-100 text-[20px]">info</span>
+</button>
+</div>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col items-center justify-center px-8 relative">
+<!-- Background Pulse Decorations -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="w-80 h-80 rounded-full bg-primary/10 blur-[100px] pulse-slow"></div>
+</div>
+<!-- Central Hero Section -->
+<div class="relative z-10 flex flex-col items-center text-center w-full">
+<!-- Glowing Stethoscope Icon -->
+<div class="relative mb-12">
+<div class="absolute inset-0 bg-primary/20 blur-2xl rounded-full scale-150"></div>
+<div class="size-32 rounded-full bg-gradient-to-br from-primary to-[#cc7a00] flex items-center justify-center text-white shadow-2xl relative z-10 border-4 border-white/10 glow-orange">
+<span class="material-symbols-outlined text-6xl" style="font-variation-settings: 'FILL' 1">stethoscope</span>
+</div>
+<!-- Animated Rings -->
+<div class="absolute -inset-4 border border-primary/20 rounded-full pulse-slow"></div>
+<div class="absolute -inset-8 border border-primary/10 rounded-full pulse-slow" style="animation-delay: 1s"></div>
+</div>
+<!-- Typography Header -->
+<h1 class="text-white text-3xl font-bold tracking-tight mb-4 px-2">
+                Connect with Specialists
+            </h1>
+<p class="text-slate-400 text-base leading-relaxed max-w-[280px] mb-8">
+                Based on your results, we recommend consulting a <span class="text-primary font-medium">Pulmonologist</span> or <span class="text-primary font-medium">Radiologist</span>.
+            </p>
+<!-- Specialist Chips / Tags -->
+<div class="flex gap-2 mb-12">
+<div class="glass px-4 py-2 rounded-full flex items-center gap-2">
+<span class="size-2 rounded-full bg-primary"></span>
+<span class="text-xs font-medium text-slate-300">Pulmonology</span>
+</div>
+<div class="glass px-4 py-2 rounded-full flex items-center gap-2">
+<span class="size-2 rounded-full bg-primary"></span>
+<span class="text-xs font-medium text-slate-300">Radiology</span>
+</div>
+</div>
+<!-- Premium CTA Button -->
+<button class="group w-full max-w-sm bg-primary hover:bg-[#ffad33] text-background-dark font-bold text-lg py-5 rounded-full shadow-[0_10px_30px_rgba(255,159,26,0.3)] transition-all duration-300 flex items-center justify-center gap-3 active:scale-95">
+                Schedule Consultation
+                <span class="material-symbols-outlined font-bold">arrow_forward</span>
+</button>
+<button class="mt-6 text-slate-500 hover:text-slate-300 text-sm font-medium transition-colors py-2">
+                Dismiss Recommendations
+            </button>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Inspired by Components List) -->
+<div class="mt-auto border-t border-white/5 bg-[#0B1220]/80 backdrop-blur-xl px-4 pb-10 pt-4 flex justify-between items-center z-20">
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-500" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">home</span>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-500" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide">Analysis</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-primary" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">group</span>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide">Specialists</p>
+</a>
+<a class="flex flex-1 flex-col items-center gap-1 text-slate-500" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">account_circle</span>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide">Profile</p>
+</a>
+</div>
+<!-- Background Layer (Abstract Gradients) -->
+<div class="fixed inset-0 -z-10 pointer-events-none opacity-40">
+<div class="absolute top-[-10%] left-[-10%] w-[50%] h-[40%] bg-primary/10 blur-[120px] rounded-full"></div>
+<div class="absolute bottom-[-5%] right-[-5%] w-[40%] h-[30%] bg-primary/5 blur-[100px] rounded-full"></div>
+</div>
+</body></html>

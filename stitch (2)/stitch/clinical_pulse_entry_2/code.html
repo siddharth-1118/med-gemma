@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Onboarding: AI Analysis - MedGemma</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Product+Sans:wght@400;700&amp;family=Roboto:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0061A4",
+                        "on-primary": "#FFFFFF",
+                        "primary-container": "#D1E4FF",
+                        "on-primary-container": "#001D36",
+                        "surface": "#FDFCFF",
+                        "on-surface": "#1A1C1E",
+                        "on-surface-variant": "#43474E",
+                        "outline": "#73777F"
+                    },
+                    fontFamily: {
+                        "sans": ["Roboto", "sans-serif"],
+                        "google-sans": ["'Product Sans'", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        :root {
+            --md-sys-color-primary: #0061A4;
+            --md-sys-color-surface: #FDFCFF;
+        }
+        .xray-container {
+            background: linear-gradient(180deg, #1A1C1E 0%, #2C2F33 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .ai-scan-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #4285F4, transparent);
+            width: 100%;
+            position: absolute;
+            top: 40%;
+            box-shadow: 0 0 15px #4285F4;
+        }
+        .glass-overlay {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-sans antialiased text-on-surface">
+<div class="relative flex h-screen w-full flex-col overflow-hidden max-w-[430px] mx-auto">
+<div class="w-full h-11 px-8 flex justify-between items-center bg-transparent shrink-0">
+<span class="text-[15px] font-semibold">9:41</span>
+<div class="flex gap-1.5 items-center">
+<span class="material-symbols-outlined text-[18px]">signal_cellular_4_bar</span>
+<span class="material-symbols-outlined text-[18px]">wifi</span>
+<span class="material-symbols-outlined text-[20px]">battery_full</span>
+</div>
+</div>
+<div class="relative w-full aspect-[4/5] max-h-[45%] shrink-0 px-4 pt-4">
+<div class="w-full h-full rounded-[2.5rem] xray-container flex items-center justify-center shadow-xl overflow-hidden">
+<div class="absolute inset-0 opacity-40 flex items-center justify-center">
+<span class="material-symbols-outlined text-[240px] text-white/20 select-none">skeleton</span>
+</div>
+<div class="absolute inset-0 p-8 flex flex-col justify-around">
+<div class="ai-scan-line"></div>
+<div class="flex justify-between items-start">
+<div class="glass-overlay rounded-lg p-2 flex flex-col gap-1">
+<div class="w-12 h-1 bg-primary/60 rounded"></div>
+<div class="w-8 h-1 bg-white/20 rounded"></div>
+</div>
+<div class="border-2 border-primary/40 rounded-full p-4 animate-pulse">
+<span class="material-symbols-outlined text-primary text-3xl">troubleshoot</span>
+</div>
+</div>
+<div class="flex justify-center">
+<div class="glass-overlay rounded-2xl p-4 flex items-center gap-3 border-primary/30">
+<span class="material-symbols-outlined text-green-400">check_circle</span>
+<div class="flex flex-col">
+<span class="text-[10px] text-white/60 uppercase font-bold tracking-wider">Analysis Status</span>
+<span class="text-xs text-white font-medium">98.4% Accuracy Match</span>
+</div>
+</div>
+</div>
+</div>
+<div class="absolute top-[30%] left-[25%] w-32 h-32 border-2 border-dashed border-primary/60 rounded-xl">
+<div class="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-primary"></div>
+<div class="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-primary"></div>
+<div class="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-primary"></div>
+<div class="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-primary"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col flex-1 px-8 pt-10 pb-6 text-center">
+<h2 class="font-google-sans text-3xl font-bold text-on-surface tracking-tight mb-4">
+                Precision Diagnostics
+            </h2>
+<p class="text-on-surface-variant text-lg leading-relaxed px-2">
+                Harness the power of multimodal AI to analyze clinical images and data with unprecedented accuracy.
+            </p>
+</div>
+<div class="w-full px-8 pb-10 flex flex-col items-center gap-8">
+<div class="flex gap-2">
+<div class="w-6 h-2 rounded-full bg-primary"></div>
+<div class="w-2 h-2 rounded-full bg-primary-container"></div>
+<div class="w-2 h-2 rounded-full bg-primary-container"></div>
+</div>
+<button class="w-full bg-primary text-on-primary py-4 px-6 rounded-full font-medium text-base shadow-sm active:scale-[0.98] transition-transform flex items-center justify-center gap-2">
+                Next
+                <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+<button class="text-on-surface-variant font-medium text-sm hover:text-primary transition-colors">
+                Skip Introduction
+            </button>
+<div class="mt-2 w-32 h-1.5 bg-on-surface/10 rounded-full"></div>
+</div>
+</div>
+<div class="hidden">
+<div data-alt="Clinical illustration of an AI-enhanced chest X-ray with digital scanning overlays"></div>
+<div data-alt="Material Design 3 onboarding screen for a medical AI application"></div>
+</div>
+
+</body></html>

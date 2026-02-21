@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Monthly Calendar Scheduler - MedGemma</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f5a329", // Request Consultation Orange
+                        "clinical-teal": "#2EC4B6", // Subtle Teal Glow
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#0B1220", // Custom Dark Theme
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .teal-glow {
+            box-shadow: 0 0 12px rgba(46, 196, 182, 0.3);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<!-- iOS Bottom Sheet Container -->
+<div class="relative flex h-screen w-full flex-col overflow-hidden">
+<!-- Status Bar Area (Spacer) -->
+<div class="h-12 w-full"></div>
+<!-- Main Modal Content -->
+<div class="flex-1 flex flex-col bg-background-light dark:bg-background-dark rounded-t-xl shadow-2xl border-t border-slate-200 dark:border-slate-800">
+<!-- Bottom Sheet Handle -->
+<div class="flex h-8 w-full items-center justify-center">
+<div class="h-1.5 w-12 rounded-full bg-slate-300 dark:bg-slate-700"></div>
+</div>
+<!-- Header Section -->
+<div class="flex items-center px-6 py-2 justify-between">
+<button class="flex size-10 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">close</span>
+</button>
+<div class="flex flex-col items-center">
+<h2 class="text-lg font-bold tracking-tight">Schedule Appointment</h2>
+<p class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-widest">MedGemma Assistant</p>
+</div>
+<button class="flex size-10 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined">info</span>
+</button>
+</div>
+<!-- Calendar Section -->
+<div class="px-6 py-4">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-xl font-bold">October 2023</h3>
+<div class="flex gap-2">
+<button class="size-10 flex items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="size-10 flex items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Calendar Grid -->
+<div class="grid grid-cols-7 gap-y-2 text-center">
+<!-- Weekdays -->
+<div class="text-[11px] font-bold text-slate-400 uppercase mb-2">Sun</div>
+<div class="text-[11px] font-bold text-slate-400 uppercase mb-2">Mon</div>
+<div class="text-[11px] font-bold text-slate-400 uppercase mb-2">Tue</div>
+<div class="text-[11px] font-bold text-slate-400 uppercase mb-2">Wed</div>
+<div class="text-[11px] font-bold text-slate-400 uppercase mb-2">Thu</div>
+<div class="text-[11px] font-bold text-slate-400 uppercase mb-2">Fri</div>
+<div class="text-[11px] font-bold text-slate-400 uppercase mb-2">Sat</div>
+<!-- Row 1 -->
+<div class="h-12 flex flex-col items-center justify-center text-slate-400/50">28</div>
+<div class="h-12 flex flex-col items-center justify-center text-slate-400/50">29</div>
+<div class="h-12 flex flex-col items-center justify-center text-slate-400/50">30</div>
+<button class="h-12 group flex flex-col items-center justify-center relative">
+<span class="text-sm font-medium">1</span>
+</button>
+<button class="h-12 group flex flex-col items-center justify-center relative">
+<span class="text-sm font-medium">2</span>
+<div class="absolute bottom-1.5 size-1 rounded-full bg-clinical-teal teal-glow"></div>
+</button>
+<button class="h-12 group flex flex-col items-center justify-center relative">
+<span class="text-sm font-medium">3</span>
+</button>
+<button class="h-12 group flex flex-col items-center justify-center relative">
+<span class="text-sm font-medium">4</span>
+<div class="absolute bottom-1.5 size-1 rounded-full bg-clinical-teal teal-glow"></div>
+</button>
+<!-- Row 2 -->
+<button class="h-12 group flex flex-col items-center justify-center relative">
+<span class="text-sm font-medium">5</span>
+</button>
+<!-- SELECTED DATE -->
+<button class="h-12 group flex flex-col items-center justify-center relative">
+<div class="absolute inset-1.5 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
+<span class="text-sm font-bold text-background-dark">6</span>
+</div>
+</button>
+<button class="h-12 group flex flex-col items-center justify-center relative">
+<span class="text-sm font-medium">7</span>
+<div class="absolute bottom-1.5 size-1 rounded-full bg-clinical-teal teal-glow"></div>
+</button>
+<button class="h-12 group flex flex-col items-center justify-center relative">
+<span class="text-sm font-medium">8</span>
+</button>
+<button class="h-12 group flex flex-col items-center justify-center relative">
+<span class="text-sm font-medium">9</span>
+<div class="absolute bottom-1.5 size-1 rounded-full bg-clinical-teal teal-glow"></div>
+</button>
+<button class="h-12 group flex flex-col items-center justify-center relative">
+<span class="text-sm font-medium">10</span>
+</button>
+<button class="h-12 group flex flex-col items-center justify-center relative">
+<span class="text-sm font-medium">11</span>
+</button>
+<!-- Row 3 -->
+<button class="h-12 group flex flex-col items-center justify-center relative">
+<span class="text-sm font-medium">12</span>
+<div class="absolute bottom-1.5 size-1 rounded-full bg-clinical-teal teal-glow"></div>
+</button>
+<button class="h-12 group flex flex-col items-center justify-center relative">
+<span class="text-sm font-medium">13</span>
+</button>
+<button class="h-12 group flex flex-col items-center justify-center relative">
+<span class="text-sm font-medium">14</span>
+</button>
+<button class="h-12 group flex flex-col items-center justify-center relative">
+<span class="text-sm font-medium">15</span>
+<div class="absolute bottom-1.5 size-1 rounded-full bg-clinical-teal teal-glow"></div>
+</button>
+<button class="h-12 group flex flex-col items-center justify-center relative">
+<span class="text-sm font-medium">16</span>
+</button>
+<button class="h-12 group flex flex-col items-center justify-center relative">
+<span class="text-sm font-medium">17</span>
+</button>
+<button class="h-12 group flex flex-col items-center justify-center relative">
+<span class="text-sm font-medium">18</span>
+<div class="absolute bottom-1.5 size-1 rounded-full bg-clinical-teal teal-glow"></div>
+</button>
+</div>
+</div>
+<!-- Clinician List Header -->
+<div class="px-6 pt-6 pb-2 flex items-center justify-between border-t border-slate-200 dark:border-slate-800/50 mt-2">
+<h4 class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Available Clinicians</h4>
+<span class="text-xs font-semibold px-2 py-1 rounded-full bg-clinical-teal/10 text-clinical-teal">4 slots available</span>
+</div>
+<!-- Clinician List -->
+<div class="flex-1 overflow-y-auto px-6 space-y-3 hide-scrollbar pb-32">
+<!-- Doctor Card 1 -->
+<div class="flex items-center p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 transition-all active:scale-95">
+<div class="relative">
+<img alt="Professional portrait of Dr. Sarah Jenkins" class="size-14 rounded-full object-cover border-2 border-primary/20" data-alt="Professional portrait of Dr. Sarah Jenkins" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfi_Ba6htMItUSljSJx3lEywtIbcKWf0hhnobLlAly7XCkuj9WBxBuY0TIBNa0ltEEdJzGyF434lo26Cv_M-775NVWBq6iB4GwFsMjdN-wBgtcqu1wPdOzwdTilK9hsJ9mepiww7ZBRh19Z2UF52uxFlJPP5dk4LK5gp_Lx0ZKUqV8wqdkG-CaP1Z6xXI-_K9azzFK6rxMKDyGh3fkKdlQORqYclLyN2VXaVQiiOzczMrS_K3kxXRf8O00dKR99WD7SO2T-h8OEJI"/>
+<div class="absolute bottom-0 right-0 size-4 rounded-full bg-green-500 border-2 border-background-dark"></div>
+</div>
+<div class="ml-4 flex-1">
+<h5 class="text-base font-bold">Dr. Sarah Jenkins</h5>
+<p class="text-xs text-slate-500 dark:text-slate-400">Cardiology Specialist</p>
+</div>
+<div class="text-right">
+<span class="inline-block px-3 py-1.5 rounded-full bg-slate-200 dark:bg-slate-800 text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                            10:30 AM
+                        </span>
+</div>
+</div>
+<!-- Doctor Card 2 -->
+<div class="flex items-center p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 transition-all active:scale-95">
+<div class="relative">
+<img alt="Professional portrait of Dr. Marcus Chen" class="size-14 rounded-full object-cover border-2 border-slate-200 dark:border-slate-700" data-alt="Professional portrait of Dr. Marcus Chen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpJyAUl5r_sph70wZnXCNqhze1WUJ9IkE3HpFQg7kNo2arPzqMSLs6K0zT07akfNzb0STpYGKoYKdyonHjYG4ypd_1qv5JpFQEV9pPpuIRHagvbYdK1mLXL5xWY39ylpWfDzxWFcmFnZJkxDHPiQU6LqXZoJ4E47_b7hhI5mw5Iw-MThLtmcwJSU_raGFy-qrV8Xq6FQ21WaHSb0YWQnF9OnHaRrLR54PUkgMZHpmhbt3YOPLFMgBV5b_JhVeTt3JLgkLgEPGUr-k"/>
+</div>
+<div class="ml-4 flex-1">
+<h5 class="text-base font-bold">Dr. Marcus Chen</h5>
+<p class="text-xs text-slate-500 dark:text-slate-400">Neurology Department</p>
+</div>
+<div class="text-right">
+<span class="inline-block px-3 py-1.5 rounded-full bg-slate-200 dark:bg-slate-800 text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                            02:15 PM
+                        </span>
+</div>
+</div>
+<!-- Doctor Card 3 -->
+<div class="flex items-center p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 transition-all active:scale-95">
+<div class="relative">
+<img alt="Professional portrait of Dr. Elena Rodriguez" class="size-14 rounded-full object-cover border-2 border-slate-200 dark:border-slate-700" data-alt="Professional portrait of Dr. Elena Rodriguez" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdzpjKYY1H3y5c4YkMzlKkpgEaWEU7lLiAnqANUKLjfIcjM8TsoOFBKrox1--pc8pGPq5doh4ahKHmjEHDjkOU34EClHfrtYbFV1R78Ks02QRQF4qpCViVANS-vh8LOwNfpn0WR98_ZUiEWhD3wQy34ndM5T94QCxE1o2R6aKN7gNr8dwyTaZiZxNFZ4mZV60WJogjhpIrgrR0uBuDOejcLAmoddtI_moCh1HUeDRbwP6xWYQrEi2s4NGHicCbxZHlHFHz8Tz9DXE"/>
+</div>
+<div class="ml-4 flex-1">
+<h5 class="text-base font-bold">Dr. Elena Rodriguez</h5>
+<p class="text-xs text-slate-500 dark:text-slate-400">Internal Medicine</p>
+</div>
+<div class="text-right">
+<span class="inline-block px-3 py-1.5 rounded-full bg-slate-200 dark:bg-slate-800 text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                            04:45 PM
+                        </span>
+</div>
+</div>
+</div>
+<!-- Sticky Bottom CTA -->
+<div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-background-light dark:from-background-dark via-background-light/95 dark:via-background-dark/95 to-transparent">
+<button class="w-full h-14 bg-primary text-background-dark text-base font-bold rounded-full shadow-xl shadow-primary/20 flex items-center justify-center gap-2 active:scale-95 transition-transform">
+<span>Request Consultation</span>
+<span class="material-symbols-outlined text-[20px]">calendar_add_on</span>
+</button>
+<div class="mt-4 flex justify-center">
+<div class="h-1 w-32 rounded-full bg-slate-300 dark:bg-slate-800"></div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

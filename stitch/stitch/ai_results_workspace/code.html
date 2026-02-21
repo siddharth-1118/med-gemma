@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MedGemma AI Results Workspace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1fa5d6",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111d21",
+                        "accent-orange": "#ff8c00",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(31, 165, 214, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .ai-glow {
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.4);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display selection:bg-primary/30">
+<div class="relative flex h-screen w-full flex-col overflow-hidden">
+<!-- Header -->
+<header class="flex items-center justify-between px-6 py-4 bg-background-dark/80 backdrop-blur-md z-10 border-b border-white/5">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">clinical_notes</span>
+</div>
+<div>
+<h1 class="text-sm font-bold tracking-tight">MedGemma <span class="text-primary">AI</span></h1>
+<p class="text-[10px] text-slate-400 uppercase tracking-widest font-semibold">Workspace #4482-A</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="size-10 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-xl">share</span>
+</button>
+<button class="size-10 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-xl">more_vert</span>
+</button>
+</div>
+</header>
+<!-- Main Content (Scrollable) -->
+<main class="flex-1 overflow-y-auto pb-32">
+<!-- AI Attention Viewer -->
+<div class="relative w-full aspect-square md:aspect-video bg-black flex items-center justify-center group">
+<div class="absolute inset-0 opacity-60">
+<div class="w-full h-full bg-cover bg-center" data-alt="High resolution medical chest X-ray image" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDOAOyjtnyS0YwDDbLcRxbUnp9UEpMPQo76pzvo_dCFvZrKM2wwqIkMVIwPD4IZPZ0XhAXFBcUzElEAbvKNGjetV6ESooM8M3XQWskh-_S-_FZZuqWgrwrIUKjOmxNthcMDyGCkTnwTU224tTOGKsFDoodMnvZzruOztV9tLT-cuwEJD7gBfllA2w6us65j_yo1QbTm1OtwAq5R9zxPlZrruRLGvLeegvkt8wj13gHG5QaKXf7_MYBXzv6qmOsnFZKsfc5GlchoEc8')"></div>
+</div>
+<!-- Bounding Box Highlights -->
+<div class="absolute top-1/4 left-1/3 w-32 h-24 border-2 border-accent-orange ai-glow rounded-sm">
+<span class="absolute -top-6 left-0 bg-accent-orange text-black text-[10px] font-bold px-1.5 py-0.5 rounded-t-sm uppercase">Region Alpha</span>
+</div>
+<div class="absolute bottom-1/3 right-1/4 w-20 h-20 border-2 border-accent-orange/60 rounded-sm">
+<span class="absolute -top-6 left-0 bg-accent-orange/60 text-black text-[10px] font-bold px-1.5 py-0.5 rounded-t-sm uppercase">Region Beta</span>
+</div>
+<!-- Floating Controls -->
+<div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-black/40 backdrop-blur-xl p-2 rounded-full border border-white/10">
+<button class="size-10 rounded-full flex items-center justify-center bg-white/10 text-white hover:bg-primary transition-colors">
+<span class="material-symbols-outlined">zoom_in</span>
+</button>
+<div class="w-[1px] h-6 bg-white/10"></div>
+<button class="size-10 rounded-full flex items-center justify-center bg-white/10 text-white hover:bg-primary transition-colors">
+<span class="material-symbols-outlined">contrast</span>
+</button>
+<div class="w-[1px] h-6 bg-white/10"></div>
+<button class="size-10 rounded-full flex items-center justify-center bg-white/10 text-white hover:bg-primary transition-colors">
+<span class="material-symbols-outlined">layers</span>
+</button>
+</div>
+</div>
+<!-- Analysis Tabs Section -->
+<div class="px-4 mt-6">
+<!-- Tab Selector -->
+<div class="flex bg-white/5 p-1 rounded-full mb-6">
+<button class="flex-1 py-2 text-xs font-bold rounded-full bg-primary text-white shadow-lg shadow-primary/20">Analysis</button>
+<button class="flex-1 py-2 text-xs font-semibold text-slate-400">Symptom Guide</button>
+<button class="flex-1 py-2 text-xs font-semibold text-slate-400">AI Consult</button>
+</div>
+<!-- Tab Content: Analysis -->
+<div class="space-y-4">
+<!-- Findings Card -->
+<div class="glass-card p-5 rounded-xl">
+<div class="flex items-center gap-2 mb-4 text-primary">
+<span class="material-symbols-outlined text-xl">fact_check</span>
+<h3 class="font-bold">Image Findings</h3>
+</div>
+<ul class="space-y-3">
+<li class="flex gap-3 items-start">
+<div class="size-1.5 rounded-full bg-accent-orange mt-1.5 shrink-0"></div>
+<p class="text-sm text-slate-300 leading-relaxed">Evidence of hyperinflation consistent with chronic obstructive pulmonary disease (COPD).</p>
+</li>
+<li class="flex gap-3 items-start">
+<div class="size-1.5 rounded-full bg-accent-orange mt-1.5 shrink-0"></div>
+<p class="text-sm text-slate-300 leading-relaxed">Increased bronchovascular markings noted in bilateral lower lobes.</p>
+</li>
+<li class="flex gap-3 items-start">
+<div class="size-1.5 rounded-full bg-slate-600 mt-1.5 shrink-0"></div>
+<p class="text-sm text-slate-400 leading-relaxed italic">No acute focal consolidation or large pleural effusion identified.</p>
+</li>
+</ul>
+</div>
+<!-- Limitations Card -->
+<div class="glass-card p-5 rounded-xl border-dashed border-white/20">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2 text-slate-400">
+<span class="material-symbols-outlined text-xl">warning</span>
+<h3 class="text-sm font-semibold">AI Limitations</h3>
+</div>
+<span class="text-[10px] font-bold bg-white/10 px-2 py-0.5 rounded text-slate-300">CONFIDENCE: 92.4%</span>
+</div>
+<p class="text-xs text-slate-400 leading-relaxed">
+                            Model performance may be impacted by rotation in the current PA view. Comparison with lateral projection is recommended for definitive ruling out of retrocardiac opacities.
+                        </p>
+</div>
+<!-- Symptom Guide Preview (Quick Scroll) -->
+<div class="pt-2">
+<h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4 px-1">Suggested for Review</h3>
+<div class="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 no-scrollbar">
+<div class="shrink-0 w-40 glass-card p-4 rounded-xl border-l-4 border-l-primary">
+<span class="material-symbols-outlined text-primary mb-2">respiratory_rate</span>
+<h4 class="text-sm font-bold">Dyspnea</h4>
+<p class="text-[10px] text-slate-400 mt-1">Difficulty breathing at rest or during exertion.</p>
+</div>
+<div class="shrink-0 w-40 glass-card p-4 rounded-xl border-l-4 border-l-slate-600">
+<span class="material-symbols-outlined text-slate-400 mb-2">thermometer_gain</span>
+<h4 class="text-sm font-bold">Pyrexia</h4>
+<p class="text-[10px] text-slate-400 mt-1">Elevated body temperature above 38°C.</p>
+</div>
+<div class="shrink-0 w-40 glass-card p-4 rounded-xl border-l-4 border-l-slate-600">
+<span class="material-symbols-outlined text-slate-400 mb-2">stethoscope</span>
+<h4 class="text-sm font-bold">Wheezing</h4>
+<p class="text-[10px] text-slate-400 mt-1">High-pitched whistling sound during breathing.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Fixed Footer Actions -->
+<footer class="absolute bottom-0 left-0 right-0 bg-background-dark/80 backdrop-blur-2xl border-t border-white/5 px-6 pt-4 pb-8 flex flex-col items-center gap-4">
+<button class="w-full h-14 bg-primary text-white font-bold rounded-full flex items-center justify-center gap-2 shadow-xl shadow-primary/20 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">download</span>
+                Download Analysis Report
+            </button>
+<a class="text-xs font-semibold text-slate-400 hover:text-primary transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-sm">cloud_upload</span>
+                New Patient Upload
+            </a>
+</footer>
+<!-- iOS Bottom Bar Indicator -->
+<div class="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-32 h-1 bg-white/20 rounded-full"></div>
+</div>
+</body></html>
